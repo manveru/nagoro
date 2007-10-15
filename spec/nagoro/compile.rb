@@ -18,8 +18,8 @@ describe 'Nagoro::Render' do
 
   def render(file)
     render = Nagoro::Render.new(@listeners)
-    compiled = render.from_file(file)
-    compiled.eval(binding)
+    render.from_file(file)
+    render.eval(binding)
   end
 
   def xpath(string, path)

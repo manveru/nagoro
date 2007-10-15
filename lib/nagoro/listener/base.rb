@@ -1,8 +1,6 @@
 module Nagoro
   module Listener
     class Base
-      include REXML::StreamListener
-
       attr_accessor :body, :stack
 
       def initialize(options = {})
