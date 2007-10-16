@@ -2,9 +2,12 @@ require 'lib/nagoro'
 require 'spec'
 
 describe 'Nagoro::Listener::Instruction' do
+  before :all do
+    @nagoro = Nagoro::Template[:Instruction]
+  end
+
   def instruction(string)
-    render = Nagoro::Render.new(Nagoro::Listener::Instruction)
-    render.from_string(string).to_s
+    @nagoro.pipeline(string)
   end
 
   it 'should expand <?js ?>' do

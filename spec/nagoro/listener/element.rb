@@ -14,9 +14,13 @@ class SideBar < Nagoro::Element
 end
 
 describe 'Nagoro::Listener::Element' do
+  before :all do
+    @nagoro = Nagoro::Template[:Element]
+  end
+
   def element(string)
-    render = Nagoro::Render.new(Nagoro::Listener::Element)
-    render.from_string(string).to_s
+    template = @nagoro.render(string)
+    template.result(binding)
   end
 
   it 'should expand single element' do
@@ -31,12 +35,11 @@ describe 'Nagoro::Listener::Element' do
 
   it 'should expand nested elements' do
     element('<Page><Page /></Page>').
-      should == '(Page: "(Page: \\"\\")")'
+      should == '(Page: "(Page: "")")'
   end
 
   it 'should expand different nested elements' do
     element('<Page><SideBar /></Page>').
-      should == '(Page: "(SideBar: \\"\\")")'
+      should == '(Page: "(SideBar: "")")'
   end
 end
-

@@ -2,9 +2,12 @@ require 'lib/nagoro'
 require 'spec'
 
 describe 'Nagoro::Listener::Morpher' do
+  before :all do
+    @nagoro = Nagoro::Template[:Morpher]
+  end
+
   def morph(string)
-    render = Nagoro::Render.new(Nagoro::Listener::Morpher)
-    render.from_string(string).to_s
+    @nagoro.pipeline(string)
   end
 
   it 'should morph single tag' do

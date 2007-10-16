@@ -8,10 +8,6 @@ module Nagoro
       class ElementStruct < Struct.new(:tag, :attrs, :element, :content)
       end
 
-      def initialize
-        super
-      end
-
       def tag_start(tag, attrs)
         if element = ELEMENTS[tag]
           @stack << ElementStruct.new(tag, attrs, element, [])

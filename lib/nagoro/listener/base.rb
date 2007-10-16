@@ -46,10 +46,19 @@ module Nagoro
         @body << "<?xml #{params.to_tag_params}?>"
       end
 
-      def to_s
+      def to_html
         @body.join
       end
-      alias to_str to_s
+
+      def process(template)
+        REXML::Document.parse_stream(template, self)
+      end
+
+      def reset
+        @body.clear
+        @stack.clear
+        self
+      end
     end
   end
 end

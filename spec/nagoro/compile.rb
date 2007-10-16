@@ -7,19 +7,12 @@ end
 
 describe 'Nagoro::Render' do
   before :all do
-    @listeners = [
-      Nagoro::Listener::Element,
-      Nagoro::Listener::Morpher,
-      Nagoro::Listener::Include,
-      Nagoro::Listener::Instruction,
-      Nagoro::Listener::Compile
-    ]
+    @nagoro = Nagoro::Template[:Element, :Morpher, :Include, :Instruction]
   end
 
   def render(file)
-    render = Nagoro::Render.new(@listeners)
-    render.from_file(file)
-    render.eval(binding)
+    template = @nagoro.render_file(file)
+    template.result(binding)
   end
 
   def xpath(string, path)
