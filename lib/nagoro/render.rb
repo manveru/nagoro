@@ -3,7 +3,7 @@ module Nagoro
     class << self
       def [](*listeners)
         instance = new
-        instance.listeners = listeners.map{|l|
+        instance.listeners = listeners.flatten.map{|l|
           Listener.const_get(l).new
         }
         instance.file = '<nagoro eval>'
