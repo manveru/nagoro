@@ -87,7 +87,24 @@ end
 desc "run rspec"
 task :spec do
   require 'spec'
-  ::Spec::Runner::CommandLine.run(['spec'], STDERR, STDOUT, true, true)
+  stdout = []
+  class << stdout
+    def print(*e) concat(e); Kernel.print(*e); end
+    def puts(*e) concat(e); Kernel.puts(*e); end
+    def flush; end
+  end
+  stderr = []
+  class << stderr
+    alias print <<
+    def print(*e) concat(e); Kernel.print(*e); end
+    def puts(*e) concat(e); Kernel.puts(*e); end
+    def flush; end
+  end
+  ::Spec::Runner::CommandLine.run(['spec'], stderr, stdout, false, true)
+  exit_status = stdout.last.strip[/(\d+) failures?/, 1].to_i
+  at_exit{
+    exit(exit_status == 0 ? 0 : 1)
+  }
 end
 
 task :default => :spec
