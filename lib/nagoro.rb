@@ -12,6 +12,7 @@ end
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
+require 'nagoro/version'
 require 'nagoro/listener/element'
 require 'nagoro/listener/morpher'
 require 'nagoro/listener/instruction'
