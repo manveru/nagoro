@@ -34,7 +34,7 @@ module Nagoro
       def tag_start(tag, hash)
         morphs = hash.keys & MORPHS.keys
         if morphs.empty?
-          @body << "<#{tag}#{hash.to_tag_params}>"
+          super(tag, hash)
         elsif morphs.size > 1
           raise "Cannot transform multiple morphs per tag"
         else
@@ -49,12 +49,12 @@ module Nagoro
             gsub("%morph", morph).
             gsub("%expression", value)
           @stack << [tag, morph]
-          @body << "<#{tag}#{hash.to_tag_params}>"
+          super(tag, hash)
         end
       end
 
       def tag_end(tag)
-        @body << "</#{tag}>"
+        super(tag)
 
         prev, morph = @stack.last
         if prev == tag

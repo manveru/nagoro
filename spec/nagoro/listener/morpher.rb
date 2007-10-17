@@ -19,4 +19,9 @@ describe 'Nagoro::Listener::Morpher' do
     morph('<div if="2"><p if="1" /></div>').
       should == '<?r if 2 ?><div><?r if 1 ?><p></p><?r end ?></div><?r end ?>'
   end
+
+  it 'should not open/close JUST_CLOSE tags' do
+    morph('<br /><br/>').
+      should == '<br /><br />'
+  end
 end

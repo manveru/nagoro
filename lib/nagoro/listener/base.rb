@@ -3,17 +3,28 @@ module Nagoro
     class Base
       attr_accessor :body, :stack
 
+      JUST_CLOSE = %w[br hr]
+
       def initialize(options = {})
         @body = []
         @stack = []
       end
 
       def tag_start(tag, hash)
-        @body << "<#{tag}#{hash.to_tag_params}>"
+        case tag
+        when *JUST_CLOSE
+          @body << "<#{tag}#{hash.to_tag_params} />"
+        else
+          @body << "<#{tag}#{hash.to_tag_params}>"
+        end
       end
 
       def tag_end(tag)
-        @body << "</#{tag}>"
+        case tag
+        when *JUST_CLOSE
+        else
+          @body << "</#{tag}>"
+        end
       end
 
       def text(string)
