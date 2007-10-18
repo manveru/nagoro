@@ -24,4 +24,9 @@ describe 'Nagoro::Listener::Morpher' do
     morph('<br /><br/>').
       should == '<br /><br />'
   end
+
+  it 'should not fail on html-entities' do
+    morph('<html><head><title>&lt;&lt;</title></head></html>').
+      should == '<html><head><title>&lt;&lt;</title></head></html>'
+  end
 end

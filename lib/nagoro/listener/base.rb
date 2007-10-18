@@ -1,3 +1,13 @@
+module REXML
+  module Parsers
+    class BaseParser
+      # make sure we don't transform entities, sorry about using this hack
+      # but the other hack would be much more intrusive.
+      DEFAULT_ENTITIES.clear
+    end
+  end
+end
+
 module Nagoro
   module Listener
     class Base
@@ -63,6 +73,9 @@ module Nagoro
 
       def process(template)
         REXML::Document.parse_stream(template, self)
+      end
+
+      def entity
       end
 
       def reset
