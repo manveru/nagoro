@@ -1,5 +1,4 @@
-require 'lib/nagoro'
-require 'spec'
+require 'spec/helper'
 
 module Kernel
   unless defined?__DIR__
@@ -20,11 +19,6 @@ end
 describe 'Nagoro::Listener::Element' do
   before :all do
     @nagoro = Nagoro::Template[:Include]
-  end
-
-  def render(string)
-    template = @nagoro.render(string)
-    template.result(binding)
   end
 
   it 'should comment errors' do

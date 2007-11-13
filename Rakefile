@@ -87,6 +87,7 @@ end
 desc "run rspec"
 task :spec do
   require 'spec'
+  $:.unshift(File.dirname(__FILE__))
   stdout = []
   class << stdout
     def print(*e) concat(e); Kernel.print(*e); end

@@ -1,6 +1,5 @@
-require 'lib/nagoro'
+require 'spec/helper'
 require 'nagoro/transformer/localization'
-require 'spec'
 
 describe 'Nagoro::Transformer::Localization' do
   before :all do
@@ -14,11 +13,6 @@ describe 'Nagoro::Transformer::Localization' do
       'jp' => {'moin' => 'こんいちわ'},
       'de' => {'moin' => 'Guten Tag'},
     }
-  end
-
-  def render(string)
-    template = @nagoro.render(string)
-    template.result(binding)
   end
 
   it 'should translate simple string' do

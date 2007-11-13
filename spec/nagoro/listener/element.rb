@@ -1,5 +1,4 @@
-require 'lib/nagoro'
-require 'spec'
+require 'spec/helper'
 
 class Page < Nagoro::Element
   def render
@@ -18,28 +17,23 @@ describe 'Nagoro::Listener::Element' do
     @nagoro = Nagoro::Template[:Element]
   end
 
-  def element(string)
-    template = @nagoro.render(string)
-    template.result(binding)
-  end
-
   it 'should expand single element' do
-    element('<Page />').
+    render('<Page />').
       should == '(Page: "")'
   end
 
   it 'should expand two elements' do
-    element('<Page /><Page />').
+    render('<Page /><Page />').
       should == '(Page: "")(Page: "")'
   end
 
   it 'should expand nested elements' do
-    element('<Page><Page /></Page>').
+    render('<Page><Page /></Page>').
       should == '(Page: "(Page: "")")'
   end
 
   it 'should expand different nested elements' do
-    element('<Page><SideBar /></Page>').
+    render('<Page><SideBar /></Page>').
       should == '(Page: "(SideBar: "")")'
   end
 end
