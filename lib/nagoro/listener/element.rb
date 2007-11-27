@@ -30,10 +30,6 @@ module Nagoro
         end
       end
 
-      def text(string)
-        append string
-      end
-
       def append(string)
         if @stack.empty?
           @body << string

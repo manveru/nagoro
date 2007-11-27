@@ -3,7 +3,7 @@ module Nagoro
     attr_accessor :content, :params
 
     def initialize(content)
-      @content = content
+      @content = content.strip
     end
 
     def render

@@ -18,4 +18,10 @@ describe 'Nagoro::Render' do
     render('<?r i = 2 ?>#{i * i}').
       should == '4'
   end
+
+  it 'should render nested <?r ?> correct in combination with #{}' do
+    @a = %w[foo bar foobar]
+    render('<?r if @a.empty? ?>No Tasks<?r else ?><?r @a.each do |a,b| ?>[#{a}]<?r end ?><?r end ?>').
+      should == '[foo][bar][foobar]'
+  end
 end

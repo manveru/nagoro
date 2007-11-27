@@ -23,9 +23,9 @@ module Nagoro
       def tag_start(tag, hash)
         case tag
         when *JUST_CLOSE
-          @body << "<#{tag}#{hash.to_tag_params} />"
+          append "<#{tag}#{hash.to_tag_params} />"
         else
-          @body << "<#{tag}#{hash.to_tag_params}>"
+          append "<#{tag}#{hash.to_tag_params}>"
         end
       end
 
@@ -33,38 +33,42 @@ module Nagoro
         case tag
         when *JUST_CLOSE
         else
-          @body << "</#{tag}>"
+          append "</#{tag}>"
         end
       end
 
       def text(string)
-        @body << string
+        append string
       end
 
       def instruction(name, instruction)
-        @body << "<?#{name}#{instruction}?>"
+        append "<?#{name}#{instruction}?>"
       end
 
       def comment(comment)
-        @body << "<!--#{comment}-->"
+        append "<!--#{comment}-->"
       end
 
       def doctype(name, pub_sys, long_name, uri)
-        @body << "<!DOCTYPE #{name} #{pub_sys} #{long_name} #{uri}>"
+        append "<!DOCTYPE #{name} #{pub_sys} #{long_name} #{uri}>"
       end
 
       def doctype_end
       end
 
       def cdata(content)
-        @body << "<![CDATA[#{content}]]>"
+        append "<![CDATA[#{content}]]>"
       end
 
       def xmldecl(version, encoding, standalone)
         params = {}
         params[:encoding] = encoding if encoding
         params[:standalone] = standalone if standalone
-        @body << "<?xml #{params.to_tag_params}?>"
+        append "<?xml #{params.to_tag_params}?>"
+      end
+
+      def append(string)
+        @body << string
       end
 
       def to_html

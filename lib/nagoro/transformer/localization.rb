@@ -9,7 +9,7 @@ module Nagoro
       attr_accessor :dict, :locale
 
       CONFIG = {
-        :file => 'conf/%s.yaml',
+        :file => 'config/%s.yaml',
         :locales => %w[ en ],
         :default_language => 'en',
         :mapping => {'en-us' => 'en', 'ja' => 'jp'},

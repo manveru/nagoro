@@ -14,13 +14,16 @@ module Nagoro
     attr_accessor :listeners, :compiled, :binding, :file
 
     def render_file(filename)
+      raise "File does not exist" unless File.file?(filename)
       file = File.new(filename)
       render(file)
     ensure
       file.close unless file.closed?
     end
 
-    def render(string_or_io)
+    def render(string_or_io, options = {})
+      @options = options
+      @file = options[:file] || '<nagoro>'
       @compiled = compile(pipeline(string_or_io))
       self
     end
