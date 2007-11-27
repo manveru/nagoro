@@ -16,7 +16,7 @@ class String
 end
 
 
-describe 'Nagoro::Listener::Element' do
+describe 'Nagoro::Pipe::Element' do
   before :all do
     @nagoro = Nagoro::Template[:Include]
   end

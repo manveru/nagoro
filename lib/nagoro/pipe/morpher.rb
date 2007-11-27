@@ -1,7 +1,5 @@
-require 'nagoro/listener/base'
-
 module Nagoro
-  module Listener
+  module Pipe
     class Morpher < Base
       MORPHS = {
       'if'     => {
@@ -29,6 +27,11 @@ module Nagoro
         :body => '%content',
         :end => '<?r end ?>',
       },
+      'filter' => {
+        :start => '#{%expression(%~',
+        :body => '%content',
+        :end => '~)}',
+      },
       }
 
       def tag_start(tag, hash)
@@ -42,10 +45,9 @@ module Nagoro
           value = hash[morph]
           expression = MORPHS[morph]
           e_start = expression[:start]
-          e_body = expression[:body]
           hash.delete morph
 
-          @body << e_start.
+          append e_start.
             gsub("%morph", morph).
             gsub("%expression", value)
           @stack << [tag, morph]
@@ -59,13 +61,13 @@ module Nagoro
         prev, morph = @stack.last
         if prev == tag
           e_end = MORPHS[morph][:end]
-          @body << e_end
+          append e_end
           @stack.pop
         end
       end
 
       def text(string)
-        @body << string
+        append string
       end
     end
   end

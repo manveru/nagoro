@@ -1,17 +1,17 @@
 module Nagoro
   class Template
     class << self
-      def [](*listeners)
+      def [](*pipes)
         instance = new
-        instance.listeners = listeners.flatten.map{|l|
-          Listener.const_get(l).new
+        instance.pipes = pipes.flatten.map{|l|
+          Pipe.const_get(l).new
         }
         instance.file = '<nagoro eval>'
         instance
       end
     end
 
-    attr_accessor :listeners, :compiled, :binding, :file
+    attr_accessor :pipes, :compiled, :binding, :file
 
     def render_file(filename)
       raise "File does not exist" unless File.file?(filename)
@@ -29,10 +29,10 @@ module Nagoro
     end
 
     def pipeline(string_or_io)
-      listeners.inject(string_or_io) do |template, listener|
-        listener.process(template)
-        html = listener.to_html
-        listener.reset
+      pipes.inject(string_or_io) do |template, pipe|
+        pipe.process(template)
+        html = pipe.to_html
+        pipe.reset
         html
       end
     end

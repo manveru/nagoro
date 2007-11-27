@@ -4,7 +4,7 @@ require 'yaml'
 require 'ya2yaml'
 
 module Nagoro
-  module Listener
+  module Pipe
     class Localization
       attr_accessor :dict, :locale
 

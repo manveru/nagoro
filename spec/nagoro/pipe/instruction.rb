@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'Nagoro::Listener::Instruction' do
+describe 'Nagoro::Pipe::Instruction' do
   before :all do
     @nagoro = Nagoro::Template[:Instruction]
   end

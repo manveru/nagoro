@@ -1,13 +1,13 @@
 require 'spec/helper'
-require 'nagoro/transformer/localization'
+require 'nagoro/pipe/localization'
 
 describe 'Nagoro::Transformer::Localization' do
   before :all do
-    Nagoro::Listener::Localization[
+    Nagoro::Pipe::Localization[
       :locales => %w[en de jp]
     ]
     @nagoro = Nagoro::Template[:Localization]
-    @localization = @nagoro.listeners.first
+    @localization = @nagoro.pipes.first
     @localization.dict = {
       'en' => {'moin' => 'Hello'},
       'jp' => {'moin' => 'こんいちわ'},

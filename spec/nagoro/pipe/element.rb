@@ -50,7 +50,7 @@ class Task < Struct.new(:title, :status)
   end
 end
 
-describe 'Nagoro::Listener::Element' do
+describe 'Nagoro::Pipe::Element' do
   before :all do
     @nagoro = Nagoro::Template[:Element]
   end

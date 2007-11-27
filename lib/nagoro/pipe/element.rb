@@ -1,7 +1,5 @@
-require 'nagoro/listener/base'
-
 module Nagoro
-  module Listener
+  module Pipe
     class Element < Base
       ELEMENTS = {}
 

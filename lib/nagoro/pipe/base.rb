@@ -9,7 +9,7 @@ module REXML
 end
 
 module Nagoro
-  module Listener
+  module Pipe
     class Base
       attr_accessor :body, :stack
 

@@ -1,5 +1,5 @@
 module Nagoro
-  module Listener
+  module Pipe
     class Include < Base
       def tag_start(tag, attrs)
         if tag == 'include'

@@ -1,5 +1,5 @@
 module Nagoro
-  module Listener
+  module Pipe
     class Instruction < Base
       def instruction(name, instruction)
         @body <<

@@ -17,7 +17,7 @@ module Nagoro
     end
 
     def self.inherited(klass)
-      Nagoro::Listener::Element::ELEMENTS[klass.to_s] = klass
+      Nagoro::Pipe::Element::ELEMENTS[klass.to_s] = klass
     end
   end
 
@@ -39,8 +39,8 @@ module Nagoro
     }
     name = File.basename(file, File.extname(file))
     GeneratedElement::const_set(name, element)
-    Listener::Element::ELEMENTS.delete_if{|k,v| v == element}
-    Listener::Element::ELEMENTS[name] = element
+    Pipe::Element::ELEMENTS.delete_if{|k,v| v == element}
+    Pipe::Element::ELEMENTS[name] = element
     element
   end
 end
