@@ -1,4 +1,16 @@
 module Nagoro
+  class << self
+    def render_file(filename)
+      nagoro = Template[DEFAULT_PIPES]
+      nagoro.render_file(filename)
+    end
+
+    def render(string_or_io, options = {})
+      nagoro = Template[DEFAULT_PIPES]
+      nagoro.render(string_or_io, options)
+    end
+  end
+
   class Template
     class << self
       def [](*pipes)
@@ -16,9 +28,10 @@ module Nagoro
     def render_file(filename)
       raise "File does not exist" unless File.file?(filename)
       file = File.new(filename)
-      render(file)
+      render(file, :file => filename)
     ensure
       file.close unless file.closed?
+      self
     end
 
     def render(string_or_io, options = {})

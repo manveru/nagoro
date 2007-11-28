@@ -1,7 +1,23 @@
-<?r list = [true, false, true] ?>
-<div for="cond in list">
-  <h1 if="cond">#{cond}</h1>
-</div>
-<div each="list">
-  <h1 unless="_e" times="3">#{_e}</h1>
-</div>
+<html>
+  <head>
+    <title>Nagoro Pipe::Morpher</title>
+  </head>
+  <body>
+    <?r list = [true, false, true] ?>
+
+    True items in list:
+    <div for="cond in list">
+      <h1 if="cond">#{cond}</h1>
+    </div>
+
+    False items in list:
+    <div for="cond in list">
+      <h1 unless="cond">#{cond}</h1>
+    </div>
+
+    Each item 3 times:
+    <div each="list">
+      <h1 times="3">#{_e}</h1>
+    </div>
+  </body>
+</html>

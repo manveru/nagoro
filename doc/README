@@ -92,6 +92,28 @@ breakage and give a good overview of nagoros capabilities.
 
 = Getting started
 
+See the installation section for how to install nagoro.
+After installation you can use nagoro in a couple of ways
+
+* CLI
+ 
+  From commandline using the `nagoro` executable.
+
+    $ nagoro yourfile.xhtml
+
+* In Ruby
+
+  Using Nagoro::render_file
+
+    nagoro = Nagoro.render_file('yourfile.xhtml')
+    xhtml = nagoro.result(binding)
+    puts xhtml
+
+  Using Nagoro::render
+
+    nagoro = Nagoro.render('<?r a = 42 ?>#{a * 42}')
+    xhtml = nagoro.result(binding)
+    puts xhtml
 
 = Examples
 

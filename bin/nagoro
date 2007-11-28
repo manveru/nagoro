@@ -1,0 +1,99 @@
+#!/usr/bin/env ruby
+
+NAGORO_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
+$LOAD_PATH.unshift(NAGORO_PATH)
+
+require 'nagoro/version'
+
+require 'optparse'
+options = {}
+
+optp = OptionParser.new{|opt|
+  ruby_version = "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) [#{RUBY_PLATFORM}]"
+  nagoro_version = "Nagoro #{Nagoro::VERSION}, on #{ruby_version}"
+
+  opt.banner = "Usage: nagoro [options] file1.xhtml file2.xhtml ..."
+  opt.define_head nagoro_version
+
+  opt.separator ''
+  opt.separator 'General Options:'
+
+  opt.on('-v', '--version', 'Show Version') do |v|
+    puts nagoro_version
+    exit
+  end
+  opt.on('-h', '--help', 'Show this help') do |h|
+    puts opt
+    exit
+  end
+  opt.on('-t', '--trace', 'Show backtrace') do |b|
+    options[:backtrace] = b
+  end
+  opt.on('-r', '--rexml PATH', 'Path to REXML') do |r|
+    if File.file?(File.join(r, 'rexml/rexml.rb'))
+      options[:rexml] = r
+    else
+      puts "REXML not found at: #{r}"
+      exit 1
+    end
+  end
+}
+optp.parse!
+puts optp if ARGV.empty?
+
+if rexml = options[:rexml]
+  $LOAD_PATH.unshift(rexml)
+end
+
+begin
+  require 'rexml/formatters/pretty'
+  options[:pretty_available] = true
+
+  # TODO:
+  # * Happy monkeypatching a bug in REXML, gotta inform dev.
+  module REXML
+    module Formatters
+      class Default
+        unless defined?(old_write)
+          alias old_write write
+
+          WRITE_ARITY = new.method(:write).arity
+
+          def write(*args)
+            old_write(*args[0...WRITE_ARITY])
+          end
+        end
+      end
+    end
+  end
+rescue LoadError => ex
+end
+
+require 'nagoro'
+
+pipes = [ :Element, :Morpher, :Include, :Instruction ]
+template = ::Nagoro::Template[pipes]
+
+ARGV.each do |arg|
+  begin
+  if File.file?(arg)
+    nagoro = template.render_file(arg)
+    xhtml = nagoro.result(binding)
+    doc = REXML::Document.new(xhtml)
+
+    if options[:pretty_available]
+      pretty = REXML::Formatters::Pretty.new(2, ie_hack = true)
+      # pretty.width = 73
+      pretty.compact = true
+      out = ''
+      pretty.write(doc, out)
+      print out
+    else
+      doc.write($stdout, indent = 1, transitive = false, ie_hack = true)
+    end
+  end
+  rescue => ex
+    puts ex
+    puts ex.backtrace if options[:backtrace]
+  end
+end

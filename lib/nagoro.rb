@@ -11,6 +11,7 @@ class Hash
 end
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.uniq!
 
 require 'nagoro/version'
 require 'nagoro/pipe/base'

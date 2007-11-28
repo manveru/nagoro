@@ -37,9 +37,9 @@ module Nagoro
       def tag_start(tag, hash)
         morphs = hash.keys & MORPHS.keys
         if morphs.empty?
-          super(tag, hash)
+          super
         elsif morphs.size > 1
-          raise "Cannot transform multiple morphs per tag"
+          raise "Cannot transform multiple morphs: #{hash.inspect} in <#{tag}>"
         else
           morph = morphs.first
           value = hash[morph]
