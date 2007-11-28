@@ -11,7 +11,7 @@ module Nagoro
       end
 
       def contents(file)
-        File.read(file).strip
+        open(file){|o| o.read.strip }
       rescue Errno::ENOENT, Errno::EISDIR => ex
         "<!-- #{ex} -->"
       end

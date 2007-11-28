@@ -21,12 +21,13 @@ breakage and give a good overview of nagoros capabilities.
   and the returned value should provide a #to_html method.
 
   * Element
-    
+
     Elements are tags that correspond to classes.
 
   * Include
 
-    Transforms <include href="file" /> tags
+    Transforms <include href="file" /> tags, file is passed to Kernel::open and
+    so you can even include remote locations if you require 'open-uri'
 
   * Instruction
 
@@ -34,7 +35,7 @@ breakage and give a good overview of nagoros capabilities.
     <?r code ?> to evaluate ruby code without outputting it.
 
   * Localization
-    
+
     Not based on Pipe::Base, processes the template by a regular expression and
     substitutes keys with localized strings.
 
@@ -69,7 +70,7 @@ breakage and give a good overview of nagoros capabilities.
   Some hints for the usage of Darcs
 
   * Use require 'nagoro' from anywhere
-  
+
     Add a file to your site_ruby named 'nagoro.rb'
     the content should be:
 
@@ -96,7 +97,7 @@ See the installation section for how to install nagoro.
 After installation you can use nagoro in a couple of ways
 
 * CLI
- 
+
   From commandline using the `nagoro` executable.
 
     $ nagoro yourfile.xhtml
@@ -112,6 +113,12 @@ After installation you can use nagoro in a couple of ways
   Using Nagoro::render
 
     nagoro = Nagoro.render('<?r a = 42 ?>#{a * 42}')
+    xhtml = nagoro.result(binding)
+    puts xhtml
+
+  Using Nagoro::render with filename, useful because it shows up in backtraces.
+
+    nagoro = Nagoro.render('<?r a = 42 ?>#{a * 42}', :file => 'foo.xhtml')
     xhtml = nagoro.result(binding)
     puts xhtml
 
