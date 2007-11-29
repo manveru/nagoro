@@ -1,5 +1,6 @@
 require 'lib/nagoro'
 require 'spec'
+require 'rexml/document'
 require 'rexml/xpath'
 require 'pp'
 

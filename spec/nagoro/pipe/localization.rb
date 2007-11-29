@@ -18,8 +18,8 @@ describe 'Nagoro::Transformer::Localization' do
   it 'should translate simple string' do
     @localization.dict.each do |locale, dict|
       @localization.locale = locale
-      render('[[moin]]').
-        should == dict['moin']
+      render('<p>[[moin]]</p>').
+        should == "<p>#{dict['moin']}</p>"
     end
   end
 

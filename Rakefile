@@ -84,8 +84,12 @@ task :uninstall => [:clean] do
   sh %{sudo gem uninstall #{NAME}}
 end
 
-desc "run rspec"
-task :spec do
+def run_specs_with_rexml
+  ENV['NAGORO_REXML'] = '1'
+  run_specs
+end
+
+def run_specs
   require 'spec'
   $:.unshift(File.dirname(__FILE__))
   stdout = []
@@ -106,6 +110,12 @@ task :spec do
   at_exit{
     exit(exit_status == 0 ? 0 : 1)
   }
+end
+
+desc "run rspec"
+task :spec do
+  run_specs_with_rexml
+  run_specs
 end
 
 task :default => :spec

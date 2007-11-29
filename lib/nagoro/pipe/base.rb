@@ -1,14 +1,6 @@
-module REXML
-  module Parsers
-    class BaseParser
-      # make sure we don't transform entities, sorry about using this hack
-      # but the other hack would be much more intrusive.
-      DEFAULT_ENTITIES.clear
-    end
-  end
-end
-
 module Nagoro
+  DEFAULT_PIPES = [ :Element, :Morpher, :Include, :Instruction ]
+
   module Pipe
     class Base
       attr_accessor :body, :stack
@@ -42,7 +34,8 @@ module Nagoro
       end
 
       def instruction(name, instruction)
-        append "<?#{name}#{instruction}?>"
+        instruction.strip!
+        append "<?#{name} #{instruction} ?>"
       end
 
       def comment(comment)
@@ -73,10 +66,6 @@ module Nagoro
 
       def to_html
         @body.join
-      end
-
-      def process(template)
-        REXML::Document.parse_stream(template, self)
       end
 
       def entity

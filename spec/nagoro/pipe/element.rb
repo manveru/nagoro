@@ -41,7 +41,12 @@ class Wrapper < Nagoro::Element
   end
 end
 
-class Task < Struct.new(:title, :status)
+class Task
+  attr_accessor :title, :status
+  def initialize(title, status)
+    @title, @status = title, status
+  end
+
   def toggle
     '<a href="/toggle">toggle</a>'
   end
@@ -61,8 +66,8 @@ describe 'Nagoro::Pipe::Element' do
   end
 
   it 'should expand two elements' do
-    render('<Page /><Page />').
-      should == '(Page: "")(Page: "")'
+    render('<doc><Page /><Page /></doc>').
+      should == '<doc>(Page: "")(Page: "")</doc>'
   end
 
   it 'should expand nested elements' do

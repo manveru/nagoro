@@ -16,8 +16,8 @@ describe 'Nagoro::Pipe::Morpher' do
   end
 
   it 'should not open/close JUST_CLOSE tags' do
-    pipeline('<br /><br/>').
-      should == '<br /><br />'
+    pipeline('<p><br /><br /></p>').
+      should == '<p><br /><br /></p>'
   end
 
   it 'should not fail on html-entities' do
