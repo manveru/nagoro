@@ -3,6 +3,8 @@ require 'xml/libxml'
 module Nagoro
   module Patch
     module XMLSaxParser
+      ENCLOSE = 'nagoro'
+
       # list of methods that SAX::Parser might call.
       # key is method on Patch::XMLSaxParser, value is method on Base
 
@@ -43,11 +45,11 @@ module Nagoro
       end
 
       def on_start_element(tag, hash)
-        tag_start(tag, hash)
+        tag_start(tag, hash) unless tag == ENCLOSE
       end
 
       def on_end_element(tag)
-        tag_end(tag)
+        tag_end(tag) unless tag == ENCLOSE
       end
 
       def on_processing_instruction(name, instruction)
@@ -69,10 +71,7 @@ module Nagoro
       end
 
       def on_parser_error(error)
-        # puts
-        # puts error
-        # puts caller
-        # puts
+        p @body
         raise error
       end
 
@@ -84,11 +83,8 @@ module Nagoro
 
       def create_parser(obj)
         parser = XML::SaxParser.new
-        if obj.respond_to?(:read)
-          parser.string = obj.read 
-        else
-          parser.string = obj
-        end
+        string = obj.respond_to?(:read) ? obj.read : obj.to_s
+        parser.string = "<#{ENCLOSE}>" << string << "</#{ENCLOSE}>"
         parser
       end
     end

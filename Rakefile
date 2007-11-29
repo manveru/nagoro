@@ -84,12 +84,7 @@ task :uninstall => [:clean] do
   sh %{sudo gem uninstall #{NAME}}
 end
 
-def run_specs_with_rexml
-  ENV['NAGORO_REXML'] = '1'
-  run_specs
-end
-
-def run_specs
+task 'run-spec' do
   require 'spec'
   $:.unshift(File.dirname(__FILE__))
   stdout = []
@@ -114,8 +109,10 @@ end
 
 desc "run rspec"
 task :spec do
-  run_specs_with_rexml
-  run_specs
+  run = Rake::Task['run-spec']
+  run.execute
+  ENV['NAGORO_REXML'] = '1'
+  run.execute
 end
 
 task :default => :spec

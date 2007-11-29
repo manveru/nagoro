@@ -18,18 +18,18 @@ describe 'Nagoro::Render' do
 
   it 'should render' do
     render('<p></p>').should == '<p></p>'
-    render('<p>text</p>').should == '<p>text</p>'
-    render('<p>#{1 + 1}</p>').should == '<p>2</p>'
+    render('text').should == 'text'
+    render('#{1 + 1}').should == '2'
   end
 
   it 'should pipeline instructions' do
-    pipeline('<p><?r a = 1 ?></p>').
-      should == '<p><?r a = 1 ?></p>'
+    pipeline('<?r a = 1 ?>').
+      should == '<?r a = 1 ?>'
   end
 
   it 'should render instruction' do
-    render('<p><?r a = 1 ?></p>').
-      should == '<p></p>'
+    render('<?r a = 1 ?>').
+      should == ''
   end
 
   it 'should render elements' do
@@ -44,13 +44,13 @@ describe 'Nagoro::Render' do
   end
 
   it 'should render normal stuff' do
-    render('<p><?r i = 2 ?>#{i * i}</p>').
-      should == '<p>4</p>'
+    render('<?r i = 2 ?>#{i * i}').
+      should == '4'
   end
 
   it 'should render nested <?r ?> correct in combination with #{}' do
     @a = %w[foo bar foobar]
-    render('<p><?r if @a.empty? ?>No Tasks<?r else ?><?r @a.each do |a,b| ?>[#{a}]<?r end ?><?r end ?></p>').
-      should == '<p>[foo][bar][foobar]</p>'
+    render('<?r if @a.empty? ?>No Tasks<?r else ?><?r @a.each do |a,b| ?>[#{a}]<?r end ?><?r end ?>').
+      should == '[foo][bar][foobar]'
   end
 end
