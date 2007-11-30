@@ -12,7 +12,7 @@ $LOAD_PATH.uniq!
 require 'nagoro/version'
 require 'nagoro/pipe/base'
 require 'nagoro/pipe/element'
-require 'nagoro/pipe/morpher'
+require 'nagoro/pipe/morph'
 require 'nagoro/pipe/instruction'
 require 'nagoro/pipe/include'
 require 'nagoro/element'

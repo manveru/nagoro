@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Nagoro Pipe::Morpher</title>
+    <title>Nagoro Pipe::Morph</title>
   </head>
   <body>
     <?r list = [true, false, true] ?>

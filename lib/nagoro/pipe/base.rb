@@ -1,5 +1,5 @@
 module Nagoro
-  DEFAULT_PIPES = [ :Element, :Morpher, :Include, :Instruction ]
+  DEFAULT_PIPES = [ :Element, :Morph, :Include, :Instruction ]
 
   module Pipe
 

@@ -39,7 +39,7 @@ breakage and give a good overview of nagoros capabilities.
     Not based on Pipe::Base, processes the template by a regular expression and
     substitutes keys with localized strings.
 
-  * Morpher
+  * Morph
 
     Custom tag parameters like <div if="cond">condition is fulfilled</div>
 

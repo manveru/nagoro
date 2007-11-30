@@ -1,8 +1,8 @@
 require 'spec/helper'
 
-describe 'Nagoro::Pipe::Morpher' do
+describe 'Nagoro::Pipe::Morph' do
   before :all do
-    @nagoro = Nagoro::Template[:Morpher]
+    @nagoro = Nagoro::Template[:Morph]
   end
 
   it 'should morph single tag' do
@@ -52,6 +52,6 @@ describe 'Nagoro::Pipe::Morpher' do
 
   it 'should morph filter' do
     pipeline('<p filter="my_filter">x</p>').
-      should == '#{my_filter(%~<p>x</p>~)}'
+      should == '#{my_filter(%<<p>x</p>>)}'
   end
 end

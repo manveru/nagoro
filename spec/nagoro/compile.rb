@@ -7,7 +7,7 @@ end
 
 describe 'Nagoro::Render' do
   before :all do
-    @nagoro = Nagoro::Template[:Element, :Morpher, :Include, :Instruction]
+    @nagoro = Nagoro::Template[:Element, :Morph, :Include, :Instruction]
   end
 
   it 'should pipeline' do

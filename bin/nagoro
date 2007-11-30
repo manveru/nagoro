@@ -69,7 +69,7 @@ end
 require 'nagoro'
 require 'rexml/document'
 
-pipes = [ :Element, :Morpher, :Include, :Instruction ]
+pipes = [ :Element, :Morph, :Include, :Instruction ]
 template = ::Nagoro::Template[pipes]
 
 ARGV.each do |arg|
