@@ -70,6 +70,7 @@ rescue LoadError => ex
 end
 
 require 'nagoro'
+require 'rexml/document'
 
 pipes = [ :Element, :Morpher, :Include, :Instruction ]
 template = ::Nagoro::Template[pipes]
