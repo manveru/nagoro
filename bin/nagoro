@@ -26,9 +26,6 @@ optp = OptionParser.new{|opt|
     puts opt
     exit
   end
-  opt.on('-t', '--trace', 'Show backtrace') do |b|
-    options[:backtrace] = b
-  end
   opt.on('-r', '--rexml PATH', 'Path to REXML') do |r|
     if File.file?(File.join(r, 'rexml/rexml.rb'))
       options[:rexml] = r
@@ -76,7 +73,6 @@ pipes = [ :Element, :Morpher, :Include, :Instruction ]
 template = ::Nagoro::Template[pipes]
 
 ARGV.each do |arg|
-  begin
   if File.file?(arg)
     nagoro = template.render_file(arg)
     xhtml = nagoro.result(binding)
@@ -92,9 +88,5 @@ ARGV.each do |arg|
     else
       doc.write($stdout, indent = 1, transitive = false, ie_hack = true)
     end
-  end
-  rescue => ex
-    puts ex
-    puts ex.backtrace if options[:backtrace]
   end
 end
