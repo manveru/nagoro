@@ -2,6 +2,15 @@ module Nagoro
   DEFAULT_PIPES = [ :Element, :Morpher, :Include, :Instruction ]
 
   module Pipe
+
+    # Base is the superclass of most pipes, doing the grudge-work of
+    # implementing the common interface for REXML and libxml for them as well
+    # as providing all necessary defaults.
+    #
+    # Be aware that, depending on whether you use REXML or libxml, the specific
+    # interface for them is implemented in the respective modules in
+    # Nagoro::Patch
+
     class Base
       attr_accessor :body, :stack
 
