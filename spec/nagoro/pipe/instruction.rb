@@ -9,22 +9,22 @@ describe 'Nagoro::Pipe::Instruction' do
     pipeline("<p>#{string}</p>")[3..-5]
   end
 
-  it 'should expand <?js ?>' do
+  it 'should expand <?js code ?>' do
     instruction('<?js alert("Hello, World!"); ?>').
       should == '<script type="text/javascript"> alert("Hello, World!"); </script>'
   end
 
-  it 'should expand <?js:path?>' do
+  it 'should expand <?js:src path?>' do
     instruction('<?js:src /js/foo.js ?>').
       should == '<script type="text/javascript" src="/js/foo.js"></script>'
   end
 
-  it 'should expand <?css ?>' do
+  it 'should expand <?css styles ?>' do
     instruction('<?css body{ color: #eee; } ?>').
       should == '<style type="text/css"> body{ color: #eee; } </style>'
   end
 
-  it 'should expand <?css:path?>' do
+  it 'should expand <?css:src path ?>' do
     instruction('<?css:src /css/foo.css ?>').
       should == '<style type="text/css" src="/css/foo.css"></style>'
   end
