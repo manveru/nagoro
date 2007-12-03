@@ -7,6 +7,7 @@ describe 'Error' do
 
   xml_decl = '<?xml version="1.0" encoding="utf-8"?>'
   doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
+  doctype = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
 
   { Nagoro::ParseError => {
       '<' => 'xmlParseStartTag: invalid element name',
@@ -23,9 +24,10 @@ describe 'Error' do
       '<p class""></p>' => 'Specification mandate value for attribute class',
       xml_decl => "Start tag expected, '<' not found",
       ']]>' => "Sequence ']]>' not allowed in content",
-      '<?xml' => 'Malformed declaration expecting version',
+      '<![CDATA[' => "CData section not finished\n</nagor",
+      # '<?xml' => 'Malformed declaration expecting version',
       '<?xml ' => 'Malformed declaration expecting version',
-      "#{xml_decl}#{doctype}" => '',
+      "#{xml_decl}#{doctype}\n<html>\n</html>" => '',
     },
     Nagoro::ParsePI => {
       '<?x' => 'PI x space expected',
@@ -41,6 +43,7 @@ describe 'Error' do
   end
 
   [ '<?xml version="1.0" encoding="utf-8"?><html></html>',
+    doctype,
   ].each do |markup|
     it "should not raise error on: #{markup}" do
       lambda{ check(markup) }.should_not raise_error

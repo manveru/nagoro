@@ -79,15 +79,20 @@ module Nagoro
       end
 
       def on_internal_subset(name, long_name, uri)
-        append "<!DOCTYPE #{name} #{long_name} #{uri}>"
+        p :on_internal_subset => [name, long_name, uri]
+        p @parser.string
+        append %(<!DOCTYPE #{name} PUBLIC "#{long_name}" "#{uri}">)
       end
 
       def on_external_subset(name, long_name, uri)
-        append "<!DOCTYPE #{name} #{long_name} #{uri}>"
+        p :on_external_subset => [name, long_name, uri]
+        p @parser.string
+        append %(<!DOCTYPE #{name} PUBLIC "#{long_name}" "#{uri}">)
       end
 
       def on_parser_error(error)
         error.strip!
+        # p @parser.string
         case error
         when /^ParsePI: (.*)/
           raise ParsePI, $1
@@ -105,9 +110,9 @@ module Nagoro
       end
 
       def process(template)
-        parser = create_parser(template)
-        parser.callbacks = self
-        parser.parse
+        @parser = create_parser(template)
+        @parser.callbacks = self
+        @parser.parse
       end
 
       def create_parser(obj)
@@ -120,6 +125,7 @@ module Nagoro
       def enclose(string)
         case string
         when *NO_ENCLOSE
+          p :NO_ENCLOSE => string
           string
         else
           "<#{ENCLOSE}>#{string}</#{ENCLOSE}>"

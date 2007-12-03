@@ -53,4 +53,12 @@ describe 'Nagoro::Render' do
     render('<?r if @a.empty? ?>No Tasks<?r else ?><?r @a.each do |a,b| ?>[#{a}]<?r end ?><?r end ?>').
       should == '[foo][bar][foobar]'
   end
+
+  it 'should render various doctypes' do
+    [ '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+      '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+    ].each do |doctype|
+      render(doctype)
+    end
+  end
 end
