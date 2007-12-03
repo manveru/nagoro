@@ -10,13 +10,14 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.uniq!
 
 require 'nagoro/version'
+require 'nagoro/error'
+require 'nagoro/element'
+require 'nagoro/template'
 require 'nagoro/pipe/base'
 require 'nagoro/pipe/element'
 require 'nagoro/pipe/morph'
 require 'nagoro/pipe/instruction'
 require 'nagoro/pipe/include'
-require 'nagoro/element'
-require 'nagoro/template'
 
 module Nagoro
   class << self

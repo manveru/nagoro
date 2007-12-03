@@ -3,7 +3,15 @@ require 'xml/libxml'
 module Nagoro
   module Patch
     module XMLSaxParser
+
+      # Enclose whole document with this tag to make parsing fragments with
+      # multiple or no document-roots possible.
       ENCLOSE = 'nagoro'
+
+      # Do not enclose a document that matches.
+      NO_ENCLOSE = [
+        /\A\s*<\?xml/,
+      ]
 
       # list of methods that SAX::Parser might call.
       # key is method on Patch::XMLSaxParser, value is method on Base
@@ -70,9 +78,30 @@ module Nagoro
         text(string)
       end
 
+      def on_internal_subset(name, long_name, uri)
+        append "<!DOCTYPE #{name} #{long_name} #{uri}>"
+      end
+
+      def on_external_subset(name, long_name, uri)
+        append "<!DOCTYPE #{name} #{long_name} #{uri}>"
+      end
+
       def on_parser_error(error)
-        p @body
-        raise error
+        error.strip!
+        case error
+        when /^ParsePI: (.*)/
+          raise ParsePI, $1
+        else
+          raise ParseError, error.strip
+        end
+      end
+
+      def on_parser_fatal_error(error)
+        raise ParserFatalError, error.strip
+      end
+
+      def on_parser_warning(warning)
+        raise ParserWarning, warning.strip
       end
 
       def process(template)
@@ -84,8 +113,17 @@ module Nagoro
       def create_parser(obj)
         parser = XML::SaxParser.new
         string = obj.respond_to?(:read) ? obj.read : obj.to_s
-        parser.string = "<#{ENCLOSE}>" << string << "</#{ENCLOSE}>"
+        parser.string = enclose(string)
         parser
+      end
+
+      def enclose(string)
+        case string
+        when *NO_ENCLOSE
+          string
+        else
+          "<#{ENCLOSE}>#{string}</#{ENCLOSE}>"
+        end
       end
     end
   end
