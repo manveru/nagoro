@@ -22,7 +22,7 @@ require 'nagoro/pipe/include'
 module Nagoro
   class << self
     def load_libxml
-      require "nagoro/wrap/libxml"
+      require "nagoro/wrap/libxml_reader"
       :libxml
     end
 

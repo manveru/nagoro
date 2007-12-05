@@ -1,3 +1,4 @@
+__END__
 require 'xml/libxml'
 
 module Nagoro
@@ -36,6 +37,19 @@ module Nagoro
       def method_missing(meth, *args, &block)
         p meth => args
 
+
+        p :name => @reader.name,
+          :node_type => @reader.node_type,
+          :value =>  @reader.value,
+          :attributes => attributes
+      end
+
+      # Implementation
+
+      def loaddtd
+      end
+
+      def element
         attributes = {}
         if @reader.has_attributes?
           @reader.move_to_first_attribute
@@ -45,11 +59,6 @@ module Nagoro
           end
           @reader.move_to_element
         end
-
-        p :name => @reader.name,
-          :node_type => @reader.node_type,
-          :value =>  @reader.value,
-          :attributes => attributes
       end
 
       def handle_error(reader, message, error_const, unknown, unknown_1)
