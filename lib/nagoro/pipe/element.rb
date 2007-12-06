@@ -10,7 +10,7 @@ module Nagoro
         if element = ELEMENTS[tag]
           @stack << ElementStruct.new(tag, attrs, element, [])
         else
-          append "<#{tag}#{attrs.to_tag_params}>"
+          super
         end
       end
 
@@ -24,7 +24,7 @@ module Nagoro
 
           append instance.render
         else
-          append "</#{tag}>"
+          super
         end
       end
 

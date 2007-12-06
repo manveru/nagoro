@@ -109,10 +109,14 @@ end
 
 desc "run rspec"
 task :spec do
-  run = Rake::Task['run-spec']
-  run.execute
-  ENV['NAGORO_REXML'] = '1'
-  run.execute
+  engine = ENV['NAGORO_ENGINE']
+  %w[libxml rexml].each do |env|
+    puts
+    puts "Run specs for: #{env}".center(75)
+    ENV['NAGORO_ENGINE'] = env
+    sh("rake run-spec")
+  end
+  ENV['NAGORO_ENGINE'] = engine
 end
 
 task :default => :spec

@@ -15,6 +15,10 @@ module Nagoro
       attr_accessor :body, :stack
 
       JUST_CLOSE = %w[br hr]
+      HTML_ENTITIES = {
+        '<' => '&lt;',
+        '>' => '&gt;',
+      }
 
       def initialize(options = {})
         @body = []
@@ -39,6 +43,9 @@ module Nagoro
       end
 
       def text(string)
+        HTML_ENTITIES.each do |plain, entity|
+          string.gsub!(plain, entity)
+        end
         append string
       end
 

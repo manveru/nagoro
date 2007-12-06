@@ -15,9 +15,9 @@ module Nagoro
       def tag_start(tag, attrs)
         if tag == 'include'
           filename = attrs.fetch('href', attrs.fetch('src'))
-          @body << contents(filename)
+          append contents(filename)
         else
-          @body << "<#{tag}#{attrs.to_tag_params}>"
+          super
         end
       end
 
@@ -28,10 +28,8 @@ module Nagoro
       end
 
       def tag_end(tag)
-        if tag == 'include'
-        else
-          @body << "</#{tag}>"
-        end
+        return if tag == 'include'
+        super
       end
     end
   end

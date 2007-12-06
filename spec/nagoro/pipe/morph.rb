@@ -11,18 +11,8 @@ describe 'Nagoro::Pipe::Morph' do
   end
 
   it 'should morph multiple tags' do
-    pipeline('<div if="2"><p if="1" /></div>').
+    pipeline('<div if="2"><p if="1"></p></div>').
       should == '<?r if 2 ?><div><?r if 1 ?><p></p><?r end ?></div><?r end ?>'
-  end
-
-  it 'should not open/close JUST_CLOSE tags' do
-    pipeline('<p><br /><br /></p>').
-      should == '<p><br /><br /></p>'
-  end
-
-  it 'should not fail on html-entities' do
-    pipeline('<html><head><title>&lt;&lt;</title></head></html>').
-      should == '<html><head><title>&lt;&lt;</title></head></html>'
   end
 
   it 'should morph if' do

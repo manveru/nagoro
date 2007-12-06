@@ -27,23 +27,22 @@ module Nagoro
     end
 
     def load_rexml
-      puts "Please install libxml-ruby for better performance, using REXML now."
+      # puts "Please install libxml-ruby for better performance, using REXML now."
       require 'nagoro/wrap/rexml'
       :rexml
     end
   end
 end
 
+engine = ENV['NAGORO_ENGINE'] || 'rexml'
+engine = engine.downcase
+
 engine =
-  if ENV['NAGORO_REXML']
+  begin
+    Nagoro.send("load_#{engine}")
+  rescue LoadError => ex
+    puts ex
     Nagoro::load_rexml
-  else
-    begin
-      Nagoro::load_libxml
-    rescue LoadError => ex
-      puts ex
-      Nagoro::load_rexml
-    end
   end
 
 Nagoro::ENGINE = engine

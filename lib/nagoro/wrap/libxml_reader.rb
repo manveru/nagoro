@@ -18,14 +18,19 @@ module Nagoro
       ENCLOSE = 'nagoro'
 
       # Do not enclose a document that matches.
-      NO_ENCLOSE = [
-        /\A\s*<[^?]/,
+      ENCLOSE_FOR = [
+        /\A\s*[^<]/,
+        /\A\s*<(?!\?xml)/,
       ]
 
       def initialize(string, callback = self)
         @callback = callback
         @reader = XML::Reader.new(string)
         @reader.set_error_handler{|*error| @callback.libxml_reader_error(*error) }
+      end
+
+      def valid?
+        @reader.valid?
       end
 
       def read
@@ -39,18 +44,14 @@ module Nagoro
             tag_start
           when XML::Reader::TYPE_END_ELEMENT
             tag_end
-          when XML::Reader::MODE_EOF
           when XML::Reader::TYPE_PROCESSING_INSTRUCTION
             instruction
           when XML::Reader::TYPE_SIGNIFICANT_WHITESPACE
             significant_whitespace
-          when XML::Reader::TYPE_TEXT
-            p :text
+          when XML::Reader::TYPE_TEXT, XML::Reader::MODE_EOF
             text
-          when *CONST_KEYS
-            meth = CONST_VALUES[@reader.node_type]
-            p :meth => meth
-            @callback.send(meth)
+          when XML::Reader::TYPE_DOCUMENT_TYPE
+            document_type
           else
             raise "Unknown @reader.node_type: #{@reader.node_type}"
           end
@@ -59,24 +60,13 @@ module Nagoro
 
       def tag_start
         tag = @reader.name
-
         return if tag == ENCLOSE
-        attributes = {}
-        if @reader.has_attributes?
-          @reader.move_to_first_attribute
-          attributes[@reader.name] = @reader.value
-          until @reader.move_to_next_attribute == 0
-            attributes[@reader.name] = @reader.value
-          end
-          @reader.move_to_element
-        end
-
-        @callback.tag_start(tag, attributes)
+        @callback.tag_start(tag, extract_attributes)
+        tag_end if @reader.empty_element?
       end
 
       def text
         string = @reader.read_string
-        p :string => string
         @callback.text(string)
       end
 
@@ -87,12 +77,30 @@ module Nagoro
       end
 
       def instruction
-        p :instruction => [@reader.name, @reader.value]
         @callback.instruction(@reader.name, @reader.value)
       end
 
       def significant_whitespace
         @callback.text(@reader.value)
+      end
+
+      def document_type
+        name = @reader.name
+      end
+
+      def extract_attributes
+        attributes = {}
+
+        if @reader.has_attributes?
+          @reader.move_to_first_attribute
+          attributes[@reader.name] = @reader.value
+          until @reader.move_to_next_attribute == 0
+            attributes[@reader.name] = @reader.value
+          end
+          @reader.move_to_element
+        end
+
+        attributes
       end
     end
   end
@@ -104,7 +112,7 @@ module Nagoro
       ENCLOSE = Wrap::XMLReader::ENCLOSE
 
       # Do not enclose a document that matches.
-      NO_ENCLOSE = Wrap::XMLReader::NO_ENCLOSE
+      ENCLOSE_FOR = Wrap::XMLReader::ENCLOSE_FOR
 
       def process(template)
         @reader = create_parser(template)
@@ -123,16 +131,29 @@ module Nagoro
 
       def libxml_reader_error(reader, message, error_const, unknown, unknown_1)
         type = Wrap::XMLReader::CONST_NAMES[error_const]
-        raise "#{type}: #{message}"
+        message.strip!
+
+        case message
+        when /ParsePI: (.*)/
+          raise Error::Parse::PI, $1
+        when /StartTag: (.*)/
+          raise Error::Parse::StartTag, $1
+        end
+
+        raise Error::Parse, message
       end
 
       def enclose(string)
         case string
-        when *NO_ENCLOSE
-          string
-        else
+        when *ENCLOSE_FOR
           "<#{ENCLOSE}>#{string}</#{ENCLOSE}>"
+        else
+          string
         end
+      end
+
+      def valid?
+        @reader.valid?
       end
     end
   end
