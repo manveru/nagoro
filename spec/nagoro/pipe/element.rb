@@ -41,6 +41,11 @@ class Wrapper < Nagoro::Element
   end
 end
 
+unless defined?(Html)
+  class Html < Nagoro::FileElement("example/element/Html.nage")
+  end
+end
+
 class Task
   attr_accessor :title, :status
   def initialize(title, status)
@@ -78,6 +83,12 @@ describe 'Nagoro::Pipe::Element' do
   it 'should expand different nested elements' do
     render('<Page><SideBar /></Page>').
       should == '(Page: "(SideBar: "")")'
+  end
+
+  it 'should render file-elements' do
+    doc = render_file("example/hello.nag")
+    xpath(doc, "//title").first.text.should == 'Hello, World!'
+    xpath(doc, "//h1").first.text.should == 'Hello, World!'
   end
 
   it 'should render nested <?r ?> correct in combination with #{} and Element' do

@@ -7,8 +7,10 @@ REXML::Parsers::BaseParser::DEFAULT_ENTITIES.clear
 module Nagoro
   module Patch
     module REXMLStreamListener
-      def process(template)
-        REXML::Document.parse_stream(template, self)
+      def process(template, ezamar_compatible = true)
+        @template = template
+        preprocess
+        REXML::Document.parse_stream(@template, self)
       end
     end
   end

@@ -1,6 +1,4 @@
 module Nagoro
-  DEFAULT_PIPES = [ :Element, :Morph, :Include, :Instruction ]
-
   module Pipe
 
     # Base is the superclass of most pipes, doing the grudge-work of
@@ -23,6 +21,8 @@ module Nagoro
       def initialize(options = {})
         @body = []
         @stack = []
+        keys = HTML_ENTITIES.keys.map{|v| Regexp.escape(v) }.join('|')
+        @entity_regex = /#{keys}/
       end
 
       def tag_start(tag, hash)
@@ -43,8 +43,8 @@ module Nagoro
       end
 
       def text(string)
-        HTML_ENTITIES.each do |plain, entity|
-          string.gsub!(plain, entity)
+        string.gsub!(@entity_regex) do |match|
+          HTML_ENTITIES[$1]
         end
         append string
       end
@@ -85,6 +85,11 @@ module Nagoro
       end
 
       def entity
+      end
+
+      def preprocess
+        @template = @template.read if @template.respond_to?(:read)
+        @template.gsub!(/#\{((?![^\\]\})*|[^}]*)*\}/, '<?ro \1 ?>')
       end
 
       def reset

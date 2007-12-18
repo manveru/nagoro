@@ -18,6 +18,7 @@ require 'nagoro/pipe/element'
 require 'nagoro/pipe/morph'
 require 'nagoro/pipe/instruction'
 require 'nagoro/pipe/include'
+require 'nagoro/pipe/compile'
 
 module Nagoro
   class << self

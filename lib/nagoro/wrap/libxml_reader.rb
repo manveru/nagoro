@@ -114,15 +114,16 @@ module Nagoro
       # Do not enclose a document that matches.
       ENCLOSE_FOR = Wrap::XMLReader::ENCLOSE_FOR
 
-      def process(template)
-        @reader = create_parser(template)
+      def process(template, ezamar_compatible = true)
+        @template = template
+        preprocess
+        @reader = create_parser
         @reader.read_all
       end
 
-      def create_parser(obj)
-        string = obj.respond_to?(:read) ? obj.read : obj.to_s
-        string = enclose(string)
-        reader = Wrap::XMLReader.new(string, self)
+      def create_parser
+        enclose
+        reader = Wrap::XMLReader.new(@template, self)
         reader
       end
 
@@ -143,12 +144,10 @@ module Nagoro
         raise Error::Parse, message
       end
 
-      def enclose(string)
-        case string
+      def enclose
+        case @template
         when *ENCLOSE_FOR
-          "<#{ENCLOSE}>#{string}</#{ENCLOSE}>"
-        else
-          string
+          @template = "<#{ENCLOSE}>#{@template}</#{ENCLOSE}>"
         end
       end
 
