@@ -12,22 +12,20 @@ module Nagoro
     class Base
       attr_accessor :body, :stack
 
-      JUST_CLOSE = %w[br hr]
-      HTML_ENTITIES = {
-        '<' => '&lt;',
-        '>' => '&gt;',
-      }
+      EMPTY_ELEMENT = %w[ area base basefont br col frame hr
+                          img input isindex link meta param ]
+
+      TEXT_IGNORE = [ (0..8), 11, 12, (14..31), (128..255) ]
+      TEXT_PASS = [ 9, 10, 13, (32..126) ]
 
       def initialize(options = {})
         @body = []
         @stack = []
-        keys = HTML_ENTITIES.keys.map{|v| Regexp.escape(v) }.join('|')
-        @entity_regex = /#{keys}/
       end
 
       def tag_start(tag, hash)
         case tag
-        when *JUST_CLOSE
+        when *EMPTY_ELEMENT
           append "<#{tag}#{hash.to_tag_params} />"
         else
           append "<#{tag}#{hash.to_tag_params}>"
@@ -36,15 +34,22 @@ module Nagoro
 
       def tag_end(tag)
         case tag
-        when *JUST_CLOSE
+        when *EMPTY_ELEMENT
         else
           append "</#{tag}>"
         end
       end
 
       def text(string)
-        string.gsub!(@entity_regex) do |match|
-          HTML_ENTITIES[$1]
+        string.gsub!(/./u) do |match|
+          case match.ord
+          when *TEXT_IGNORE
+            # ignore
+          when *TEXT_PASS
+            match
+          else
+            "&##{match.ord};" # check
+          end
         end
         append string
       end
@@ -80,16 +85,14 @@ module Nagoro
         @body << string
       end
 
-      def to_html
+      def result
         @body.join
       end
 
-      def entity
-      end
-
       def preprocess
-        @template = @template.read if @template.respond_to?(:read)
-        @template.gsub!(/#\{((?![^\\]\})*|[^}]*)*\}/, '<?ro \1 ?>')
+        if @template.include?('#{')
+          @template.gsub!(/#\{((?![^\\]\})*|[^}]*)*\}/, '<?ro \1 ?>')
+        end
       end
 
       def reset

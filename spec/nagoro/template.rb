@@ -24,6 +24,12 @@ describe 'Nagoro' do
     rendered = Nagoro.render(string)
     rendered.should == string
   end
+
+  it 'should ::render from IO' do
+    io = StringIO.new('Hello, World!')
+    rendered = Nagoro.render(io)
+    rendered.should == 'Hello, World!'
+  end
 end
 
 describe 'Nagoro::Template' do
@@ -44,6 +50,13 @@ describe 'Nagoro::Template' do
     template.pipes.should have(Nagoro::DEFAULT_PIPES.size).pipes
     template.pipes.each do |pipe|
       pipe.should respond_to(:process)
+    end
+  end
+
+  it 'should not open/close empty tags' do
+    %w[ img hr br link meta ].each do |tag|
+      tag = "<#{tag} />"
+      Nagoro.render(tag).should == tag
     end
   end
 end

@@ -1,14 +1,20 @@
 require 'spec/helper'
 
-describe 'Nagoro::Render' do
-  before :all do
-    @nagoro = Nagoro::Template[Nagoro::DEFAULT_PIPES]
+describe 'Nagoro::render' do
+  def render(obj)
+    Nagoro.render(obj)
   end
 
-  it 'should render normal stuff' do
-    render('<?r i = 2 ?>#{i * i}').
-      should == '4'
+  it 'should render' do
+    render('<?r i = 2 ?><?ro i * i ?>').should == '4'
   end
+
+  it 'should not open/close JUST_CLOSE tags' do
+    render('<br />').should == '<br />'
+  end
+end
+
+__END__
 
   it 'should render nested <?r ?> correct in combination with #{}' do
     @a = %w[foo bar foobar]
@@ -22,11 +28,6 @@ describe 'Nagoro::Render' do
     ].each do |doctype|
       render('<?xml version="1.0" ?>' + doctype + '<html></html>')
     end
-  end
-
-  it 'should not open/close JUST_CLOSE tags' do
-    render('<br />')
-      should == '<br />'
   end
 
   it 'should not fail on html-entities' do

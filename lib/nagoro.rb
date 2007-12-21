@@ -6,6 +6,15 @@ class Hash
   end
 end
 
+class String
+  # 1.9 compat
+  unless method_defined?(:ord)
+    def ord
+      self[0]
+    end
+  end
+end
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.uniq!
 

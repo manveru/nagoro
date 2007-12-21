@@ -1,22 +1,23 @@
 require 'spec/helper'
 
 describe 'Nagoro::Pipe::Compile' do
-  before :all do
-    @nagoro = Nagoro::Template[:Compile]
+  def render(obj)
+    Nagoro::render(obj, :pipes => :Compile)
   end
 
-  def pipeval(string)
-    to_eval = pipeline(string)
-    eval(to_eval.to_ruby)
+  it 'should compile normal string' do
+    render('Hello, World!').should == 'Hello, World!'
   end
 
-  it 'should compile a template' do
-    pipeval('<?ro 1 ?>').should == '1'
+  it 'should compile ruby instructions' do
+    render('<?r a = 1 ?><?ro a ?>').should == '1'
+    render('<?r a = 1 ?><?ro a > 1 ?>').should == 'false'
+    render('<?r a = 1 ?><?ro a < 1 ?>').should == 'false'
   end
 
-  it 'should compile a template with #{}' do
-    pipeval('#{1 < 2}').should == 'true'
-    pipeval('<p>#{1 + 1}</p>').should == '<p>2</p>'
+  it 'should compile with compatiblity to Ezamar' do
+    render('<?r a = 1 ?>#{a}').should == '1'
+    render('<?r a = 1 ?>#{a > 1}').should == 'false'
+    render('<?r a = 1 ?>#{a < 1}').should == 'false'
   end
 end
-

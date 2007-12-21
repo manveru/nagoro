@@ -1,31 +1,31 @@
 require 'spec/helper'
 
 describe 'Nagoro::Pipe::Instruction' do
-  before :all do
-    @nagoro = Nagoro::Template[:Instruction]
-  end
-
-  def instruction(string)
-    pipeline("<p>#{string}</p>")[3..-5]
+  def compile(obj)
+    Nagoro::compile(obj, :pipes => :Instruction).compiled
   end
 
   it 'should expand <?js code ?>' do
-    instruction('<?js alert("Hello, World!"); ?>').
+    compile('<?js alert("Hello, World!"); ?>').
       should == '<script type="text/javascript"> alert("Hello, World!"); </script>'
   end
 
   it 'should expand <?js:src path?>' do
-    instruction('<?js:src /js/foo.js ?>').
-      should == '<script type="text/javascript" src="/js/foo.js"></script>'
+    doc = compile('<?js:src /js/foo.js ?>')
+    scripts = xpath(doc, 'script[@type="text/javascript" @src="/js/foo.js"]')
+    scripts.should have(1).element
+    scripts.first.texts.should be_empty
   end
 
   it 'should expand <?css styles ?>' do
-    instruction('<?css body{ color: #eee; } ?>').
+    compile('<?css body{ color: #eee; } ?>').
       should == '<style type="text/css"> body{ color: #eee; } </style>'
   end
 
   it 'should expand <?css:src path ?>' do
-    instruction('<?css:src /css/foo.css ?>').
-      should == '<style type="text/css" src="/css/foo.css"></style>'
+    doc = compile('<?css:src /css/foo.css ?>')
+    styles = xpath(doc, 'style[@type="text/css" @src="/css/foo.css"]')
+    styles.should have(1).element
+    styles.first.texts.should be_empty
   end
 end

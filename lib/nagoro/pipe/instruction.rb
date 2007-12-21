@@ -43,13 +43,11 @@ module Nagoro
       def instruction(name, instruction)
         instruction.strip!
 
-        @body <<
-          case name
-          when *INSTRUCTIONS.keys
-            INSTRUCTIONS[name] % instruction
-          else
-            DEFAULT % [name, instruction]
-          end
+        if custom = INSTRUCTIONS[name]
+          @body << custom % instruction
+        else
+          @body << DEFAULT % [name, instruction]
+        end
       end
 
       class << self

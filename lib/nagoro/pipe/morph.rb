@@ -59,7 +59,7 @@ module Nagoro
           :close => '<?r end ?>',
         },
         'filter' => {
-          :open => '#{%expression(%<', :close => '>)}',
+          :open => '<?ro %expression(%<', :close => '>) ?>',
         },
       }
 

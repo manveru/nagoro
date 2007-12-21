@@ -2,27 +2,19 @@ module Nagoro
   module Pipe
     class Compile < Base
       def instruction(name, instruction)
-        append(
-          case name
-          when 'r'
-            "`;#{instruction}; _out_ << %Q`"
-          when 'ro'
-            "`;_out_ << (#{instruction}); _out_ << %Q`"
-          else
-            "<?#{name} #{instruction}?>"
-          end
-        )
+        case name
+        when 'r'
+          append("`;#{instruction}; _out_ << %Q`")
+        when 'ro'
+          append("`;_out_ << (#{instruction}); _out_ << %Q`")
+        else
+          append("<?#{name} #{instruction}?>")
+        end
       end
 
-      def to_html
-        @render = @body.join
-        self
-      end
-
-      def to_ruby
-        out = "_out_ = []; _out_ << %Q`#{@render}`; _out_.join"
-        @render = nil
-        out
+      def result
+        p @body
+        "_out_ = []; _out_ << %Q`#{@body.join}`; _out_.join"
       end
 
       def compile(template)

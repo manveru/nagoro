@@ -1,4 +1,12 @@
 module Nagoro
+  def self.element(name, obj = nil, &block)
+    Pipe::Element::ELEMENTS[name] = obj || block
+  end
+
+  def self.file_element(name, filename)
+    Pipe::Element::ELEMENTS[name] = FileElement(filename)
+  end
+
   module Pipe
     class Element < Base
       ELEMENTS = {}
@@ -9,6 +17,9 @@ module Nagoro
       def tag_start(tag, attrs)
         if element = ELEMENTS[tag]
           @stack << ElementStruct.new(tag, attrs, element, [])
+        elsif tag =~ /^[A-Z]/
+          warn "Element: '<#{tag}>' not found."
+          super
         else
           super
         end
@@ -17,12 +28,17 @@ module Nagoro
       def tag_end(tag)
         estruct = @stack.reverse.find{|e| e.tag == tag}
         if estruct and estruct.tag == tag
-          instance = estruct.element.new(estruct.content.join)
-          instance.params = translate_attrs(instance, estruct.attrs)
+          attrs, element, content = estruct.values_at(1..3)
 
           @stack.pop
 
-          append instance.render
+          if element.respond_to?(:call)
+            append element.call(content.join, attrs)
+          else
+            instance = element.new(content.join)
+            instance.params = translate_attrs(instance, estruct.attrs)
+            append instance.render
+          end
         else
           super
         end

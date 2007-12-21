@@ -100,8 +100,16 @@ task 'run-spec' do
     def puts(*e) concat(e); Kernel.puts(*e); end
     def flush; end
   end
-  ::Spec::Runner::CommandLine.run(['spec'], stderr, stdout, false, true)
+
+  if Spec::VERSION::STRING >= '1.1.1'
+    options = ::Spec::Runner::OptionParser.parse(['spec'], stderr, stdout)
+    ::Spec::Runner::CommandLine.run(options)
+  else
+    ::Spec::Runner::CommandLine.run(['spec'], stderr, stdout, false, true)
+  end
+
   exit_status = stdout.last.strip[/(\d+) failures?/, 1].to_i
+
   at_exit{
     exit(exit_status == 0 ? 0 : 1)
   }
