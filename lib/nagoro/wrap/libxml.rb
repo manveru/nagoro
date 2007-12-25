@@ -1,142 +1,165 @@
 require 'xml/libxml'
 
 module Nagoro
-  module Patch
-    module XMLSaxParser
+  module Wrap
+    class XMLReader
+      CONST_NAMES = {}
+
+      XML::Reader.constants.each do |const|
+        name = const.gsub(/TYPE_/, '').downcase
+        CONST_NAMES[XML::Reader.const_get(const)] = name
+      end
+
+      CONST_KEYS = CONST_NAMES.keys.sort
+      CONST_VALUES = CONST_NAMES.values_at(*CONST_KEYS)
 
       # Enclose whole document with this tag to make parsing fragments with
       # multiple or no document-roots possible.
       ENCLOSE = 'nagoro'
 
       # Do not enclose a document that matches.
-      NO_ENCLOSE = [
-        /\A\s*<\?xml/,
+      ENCLOSE_FOR = [
+        /\A\s*[^<]/,
+        /\A\s*<(?!\?xml)/,
       ]
 
-      # list of methods that SAX::Parser might call.
-      # key is method on Patch::XMLSaxParser, value is method on Base
-
-      REXML_MAPPING = {
-        :on_cdata_block            => :cdata,
-        # :on_characters             => :text,
-        :on_comment                => :comment,
-        # :on_end_document           => nil,
-        :on_end_element            => :tag_end,
-        # :on_external_subset        => nil,
-        # :on_has_external_subset    => nil,
-        # :on_has_internal_subset    => nil,
-        # :on_internal_subset        => nil,
-        # :on_is_standalone          => nil,
-        # :on_method                 => nil,
-        # :on_parser_error           => nil,
-        # :on_parser_fatal_error     => nil,
-        # :on_parser_warning         => nil,
-        :on_processing_instruction => :instruction,
-        # :on_reference              => nil,
-        # :on_start_document         => nil,
-        :on_start_element          => :tag_start,
-      }
-
-      def method_missing(meth, *args, &block)
-        if mapping = REXML_MAPPING[meth]
-          # p meth => args
-          send(mapping, *args, &block)
-        else
-          super
-        end
+      def initialize(string, callback = self)
+        @callback = callback
+        @reader = XML::Reader.new(string)
+        @reader.set_error_handler{|*error| @callback.libxml_reader_error(*error) }
       end
 
-      def on_start_document
+      def valid?
+        @reader.valid?
       end
 
-      def on_end_document
+      def read
+        @reader.read == 0
       end
 
-      def on_start_element(tag, hash)
-        tag_start(tag, hash) unless tag == ENCLOSE
-      end
-
-      def on_end_element(tag)
-        tag_end(tag) unless tag == ENCLOSE
-      end
-
-      def on_processing_instruction(name, instruction)
-        instruction(name, instruction)
-      end
-
-      def on_characters(string)
-        string =
-          case string
-          when '<'
-            '&lt;'
-          when '>'
-            '&gt;'
+      def read_all
+        until read
+          case @reader.node_type
+          when XML::Reader::TYPE_ELEMENT
+            tag_start
+          when XML::Reader::TYPE_END_ELEMENT
+            tag_end
+          when XML::Reader::TYPE_PROCESSING_INSTRUCTION
+            instruction
+          when XML::Reader::TYPE_SIGNIFICANT_WHITESPACE
+            significant_whitespace
+          when XML::Reader::TYPE_TEXT, XML::Reader::MODE_EOF
+            text
+          when XML::Reader::TYPE_DOCUMENT_TYPE
+            document_type
           else
-            string
+            raise "Unknown @reader.node_type: #{@reader.node_type}"
           end
-
-        text(string)
-      end
-
-      def on_internal_subset(name, long_name, uri)
-        p :on_internal_subset => [name, long_name, uri]
-        p @parser.string
-        append %(<!DOCTYPE #{name} PUBLIC "#{long_name}" "#{uri}">)
-      end
-
-      def on_external_subset(name, long_name, uri)
-        p :on_external_subset => [name, long_name, uri]
-        p @parser.string
-        append %(<!DOCTYPE #{name} PUBLIC "#{long_name}" "#{uri}">)
-      end
-
-      def on_parser_error(error)
-        error.strip!
-        # p @parser.string
-        case error
-        when /^ParsePI: (.*)/
-          raise ParsePI, $1
-        else
-          raise ParseError, error.strip
         end
       end
 
-      def on_parser_fatal_error(error)
-        raise ParserFatalError, error.strip
+      def tag_start
+        tag = @reader.name
+        return if tag == ENCLOSE
+        @callback.tag_start(tag, extract_attributes)
+        tag_end if @reader.empty_element?
       end
 
-      def on_parser_warning(warning)
-        raise ParserWarning, warning.strip
+      def text
+        string = @reader.read_string
+        @callback.text(string)
       end
 
-      def process(template)
-        @parser = create_parser(template)
-        @parser.callbacks = self
-        @parser.parse
+      def tag_end
+        tag = @reader.name
+        return if tag == ENCLOSE
+        @callback.tag_end(tag)
       end
 
-      def create_parser(obj)
-        parser = XML::SaxParser.new
-        string = obj.respond_to?(:read) ? obj.read : obj.to_s
-        parser.string = enclose(string)
-        parser
+      def instruction
+        @callback.instruction(@reader.name, @reader.value)
       end
 
-      def enclose(string)
-        case string
-        when *NO_ENCLOSE
-          p :NO_ENCLOSE => string
-          string
-        else
-          "<#{ENCLOSE}>#{string}</#{ENCLOSE}>"
+      def significant_whitespace
+        @callback.text(@reader.value)
+      end
+
+      def document_type
+        name = @reader.name
+      end
+
+      def extract_attributes
+        attributes = {}
+
+        if @reader.has_attributes?
+          @reader.move_to_first_attribute
+          attributes[@reader.name] = @reader.value
+          until @reader.move_to_next_attribute == 0
+            attributes[@reader.name] = @reader.value
+          end
+          @reader.move_to_element
         end
+
+        attributes
+      end
+    end
+  end
+
+  module Patch
+    module XMLReader
+      # Enclose whole document with this tag to make parsing fragments with
+      # multiple or no document-roots possible.
+      ENCLOSE = Wrap::XMLReader::ENCLOSE
+
+      # Do not enclose a document that matches.
+      ENCLOSE_FOR = Wrap::XMLReader::ENCLOSE_FOR
+
+      def process(template, ezamar_compatible = true)
+        @template = template
+        preprocess
+        @reader = create_parser
+        @reader.read_all
+      end
+
+      def create_parser
+        enclose
+        reader = Wrap::XMLReader.new(@template, self)
+        reader
+      end
+
+      def loaddtd
+      end
+
+      def libxml_reader_error(reader, message, error_const, unknown, unknown_1)
+        type = Wrap::XMLReader::CONST_NAMES[error_const]
+        message.strip!
+
+        case message
+        when /ParsePI: (.*)/
+          raise Error::Parse::PI, $1
+        when /StartTag: (.*)/
+          raise Error::Parse::StartTag, $1
+        end
+
+        raise Error::Parse, message
+      end
+
+      def enclose
+        case @template
+        when *ENCLOSE_FOR
+          @template = "<#{ENCLOSE}>#{@template}</#{ENCLOSE}>"
+        end
+      end
+
+      def valid?
+        @reader.valid?
       end
     end
   end
 
   module Pipe
     class Base
-      include Patch::XMLSaxParser
+      include Patch::XMLReader
     end
   end
 end
