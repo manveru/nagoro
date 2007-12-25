@@ -90,9 +90,9 @@ module Nagoro
       end
 
       def preprocess
-        if @template.include?('#{')
-          @template.gsub!(/#\{((?![^\\]\})*|[^}]*)*\}/, '<?ro \1 ?>')
-        end
+        # if @template.include?('#{')
+        #   @template.gsub!(/#\{((?![^\\]\})*|[^}]*)*\}/, '<?ro \1 ?>')
+        # end
       end
 
       def reset

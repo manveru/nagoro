@@ -13,7 +13,6 @@ module Nagoro
       end
 
       def result
-        p @body
         "_out_ = []; _out_ << %Q`#{@body.join}`; _out_.join"
       end
 

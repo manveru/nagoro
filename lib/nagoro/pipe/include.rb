@@ -14,7 +14,7 @@ module Nagoro
     class Include < Base
       def tag_start(tag, attrs)
         if tag == 'include'
-          filename = attrs.fetch('href', attrs.fetch('src'))
+          filename = attrs['href'] || attrs.fetch('src')
           append contents(filename)
         else
           super
@@ -24,6 +24,7 @@ module Nagoro
       def contents(file)
         open(file){|o| o.read.strip }
       rescue Errno::ENOENT, Errno::EISDIR => ex
+        warn ex.message
         "<!-- #{ex} -->"
       end
 

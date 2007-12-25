@@ -41,7 +41,7 @@ module Nagoro
       DEFAULT = "<?%s %s ?>"
 
       def instruction(name, instruction)
-        instruction.strip!
+        instruction.to_s.strip!
 
         if custom = INSTRUCTIONS[name]
           @body << custom % instruction

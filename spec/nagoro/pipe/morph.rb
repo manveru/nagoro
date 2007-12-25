@@ -27,17 +27,17 @@ describe 'Nagoro::Pipe::Instruction' do
 
   it 'should morph for' do
     compile('<p for="i in 1..10">#{i}</p>').
-      should == '<?r for i in 1..10 ?><p><?ro i ?></p><?r end ?>'
+      should == '<?r for i in 1..10 ?><p>#{i}</p><?r end ?>'
   end
 
   it 'should morph each' do
     compile('<p each="1..10">#{_e}</p>').
-      should == '<?r 1..10.each do |_e| ?><p><?ro _e ?></p><?r end ?>'
+      should == '<?r 1..10.each do |_e| ?><p>#{_e}</p><?r end ?>'
   end
 
   it 'should morph times' do
     compile('<p times="3">#{_t}</p>').
-      should == '<?r 3.times do |_t| ?><p><?ro _t ?></p><?r end ?>'
+      should == '<?r 3.times do |_t| ?><p>#{_t}</p><?r end ?>'
   end
 
   it 'should morph filter' do

@@ -32,7 +32,7 @@ require 'nagoro/pipe/compile'
 module Nagoro
   class << self
     def load_libxml
-      require "nagoro/wrap/libxml_reader"
+      require "nagoro/wrap/libxml"
       :libxml
     end
 
@@ -40,6 +40,11 @@ module Nagoro
       # puts "Please install libxml-ruby for better performance, using REXML now."
       require 'nagoro/wrap/rexml'
       :rexml
+    end
+
+    def load_stringscanner
+      require 'nagoro/wrap/stringscanner'
+      :stringscanner
     end
   end
 end

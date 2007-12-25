@@ -26,19 +26,14 @@ optp = OptionParser.new{|opt|
     puts opt
     exit
   end
-  opt.on('-r', '--rexml PATH', 'Path to REXML') do |r|
-    if File.file?(File.join(r, 'rexml/rexml.rb'))
-      options[:rexml] = r
-    else
-      puts "REXML not found at: #{r}"
-      exit 1
-    end
+  opt.on('-I', '--include PATH', 'Additional path for $LOAD_PATH') do |r|
+    options[:include] = r
   end
 }
 optp.parse!
 puts optp if ARGV.empty?
 
-if rexml = options[:rexml]
+if rexml = options[:include]
   $LOAD_PATH.unshift(rexml)
 end
 
@@ -69,13 +64,9 @@ end
 require 'nagoro'
 require 'rexml/document'
 
-pipes = [ :Element, :Morph, :Include, :Instruction ]
-template = ::Nagoro::Template[pipes]
-
 ARGV.each do |arg|
   if File.file?(arg)
-    nagoro = template.render_file(arg)
-    xhtml = nagoro.result(binding)
+    xhtml = Nagoro.render(arg, :binding => binding)
     doc = REXML::Document.new(xhtml)
 
     if options[:pretty_available]
