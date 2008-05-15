@@ -85,11 +85,15 @@ module Nagoro
     end
 
     def pipeline(io)
-      pipes.inject(io) do |template, pipe|
+      template = io
+
+      pipes.each do |pipe|
         pipe.reset
         pipe.process(template)
-        pipe.result
+        template = pipe.result
       end
+
+      template
     end
 
     def result(options = {})
