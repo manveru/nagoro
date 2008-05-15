@@ -47,7 +47,7 @@ module Nagoro
   end
 end
 
-engine = ENV['NAGORO_ENGINE'] || 'rexml'
+engine = ENV['NAGORO_ENGINE'] || 'stringscanner'
 engine = engine.downcase
 
 engine =
