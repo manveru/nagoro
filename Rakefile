@@ -85,7 +85,7 @@ task :uninstall => [:clean] do
 end
 
 task 'run-spec' do
-  Dir['spec/nagoro/**/*.rb'].each do |file|
+  Dir['spec/*/**/*.rb'].each do |file|
     ruby file
   end
 end
