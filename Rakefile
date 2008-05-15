@@ -93,7 +93,7 @@ end
 desc "run rspec"
 task :spec do
   engine = ENV['NAGORO_ENGINE']
-  %w[libxml rexml stringscanner].each do |env|
+  %w[stringscanner libxml rexml].each do |env|
     puts
     puts "Run specs for: #{env}".center(75)
     ENV['NAGORO_ENGINE'] = env
