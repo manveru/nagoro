@@ -1,7 +1,6 @@
-require 'lib/nagoro'
-require 'spec'
+require 'spec/helper'
 
-describe 'Nagoro::Listener::Base' do
+describe "[#{Nagoro::ENGINE}] Nagoro::Listener::Base" do
   def base(string)
     nagoro = Nagoro::Template[:Base]
     nagoro.pipeline(string)

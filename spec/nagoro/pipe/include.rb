@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'Nagoro::Pipe::Include' do
+describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Include" do
   def compile(obj)
     Nagoro::compile(obj, :pipes => :Include).compiled
   end

@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'Nagoro' do
+describe "[#{Nagoro::ENGINE}] Nagoro" do
   it 'should ::compile from filename' do
     file = __DIR__/'template/hello.nag'
     template = Nagoro.compile(file)
@@ -32,7 +32,7 @@ describe 'Nagoro' do
   end
 end
 
-describe 'Nagoro::Template' do
+describe "[#{Nagoro::ENGINE}] Nagoro::Template" do
   it 'should set up with ::[]' do
     template = Nagoro::Template[]
     template.pipes.should == []

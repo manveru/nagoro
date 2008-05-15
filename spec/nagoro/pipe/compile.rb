@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'Nagoro::Pipe::Compile' do
+describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Compile" do
   def render(obj)
     Nagoro::render(obj, :pipes => :Compile)
   end

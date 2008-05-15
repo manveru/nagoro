@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'Nagoro::Pipe::Instruction' do
+describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Instruction" do
   behaves_like 'xpath'
   def compile(obj)
     Nagoro::compile(obj, :pipes => :Instruction).compiled

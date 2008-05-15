@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe 'example/hello.nag' do
+describe "[#{Nagoro::ENGINE}] example/hello.nag" do
   behaves_like 'xpath'
 
   Nagoro.file_element('Html', 'example/element/Html.nage')
