@@ -161,4 +161,8 @@ get a good coverage despite that.
 
 * Sean Russell
 
-  For REXML, it's what drives nagoro and saves me a whole lot of work.
+  For REXML, it's one of the engines that drive nagoro.
+
+* Sean Chittenden and Wai-Sun Chia
+
+  For libxml-ruby, it's one of the engines that drive nagoro.
