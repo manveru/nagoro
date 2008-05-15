@@ -1,8 +1,6 @@
 class Hash
   def to_tag_params
-    inject('') do |s,v|
-      s << %{ #{v[0]}="#{v[1]}"}
-    end
+    map{|k,v| %(#{k}="#{v}") }.join(' ')
   end
 end
 
