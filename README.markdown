@@ -3,14 +3,13 @@
 
 # About Nagoro
 
-Nagoro is a templating engine for XHTML based on REXML.
+Nagoro is a templating engine for XHTML based on different parsing engines.
 It featues a modular code layout and is used in the Ramaze web framework.
 
-Nagoro consists of a series of so-called pipes that are mainly run through
-`REXML::Document::parse_stream` to produce valid ruby from the templates that are
-eventually evaluated with custom binding.
+Nagoro consists of a series of so-called pipes to produce valid ruby from the
+templates that are eventually evaluated with custom binding.
 
-All functionality of Nagoro is carefully tested by a series of rspecs to avoid
+All functionality of Nagoro is carefully tested by a series of specs to avoid
 breakage and give a good overview of nagoros capabilities.
 
 # Features Overview
