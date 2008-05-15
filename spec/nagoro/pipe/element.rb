@@ -1,19 +1,20 @@
 require 'spec/helper'
 
 describe 'Nagoro::Pipe::Element' do
+  behaves_like 'xpath'
   def compile(obj)
     Nagoro::compile(obj, :pipes => :Element).compiled
   end
 
-  before :all do
-    Nagoro.element('Page') do |content, attrs|
-      "(Page: #{content.dump})"
-    end
-    Nagoro.element('SideBar') do |content, attrs|
-      "(SideBar: #{content.dump})"
-    end
-    Nagoro.file_element('Html', 'example/element/Html.nage')
+  Nagoro.element('Page') do |content, attrs|
+    "(Page: #{content.dump})"
   end
+
+  Nagoro.element('SideBar') do |content, attrs|
+    "(SideBar: #{content.dump})"
+  end
+
+  Nagoro.file_element('Html', 'example/element/Html.nage')
 
   it 'should compile single element' do
     compile('<Page />').
@@ -37,7 +38,7 @@ describe 'Nagoro::Pipe::Element' do
 
   it 'should render file-elements' do
     doc = compile('example/hello.nag')
-    doc.should_not be_empty
+    doc.should.not.be.empty
     xpath(doc, '//title').first.text.should == 'Hello, World!'
     xpath(doc, '//h1').first.text.should == 'Hello, World!'
   end

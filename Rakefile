@@ -85,34 +85,9 @@ task :uninstall => [:clean] do
 end
 
 task 'run-spec' do
-  require 'spec'
-  $:.unshift(File.dirname(__FILE__))
-  stdout = []
-  class << stdout
-    def print(*e) concat(e); Kernel.print(*e); end
-    def puts(*e) concat(e); Kernel.puts(*e); end
-    def flush; end
+  Dir['spec/nagoro/**/*.rb'].each do |file|
+    ruby file
   end
-  stderr = []
-  class << stderr
-    alias print <<
-    def print(*e) concat(e); Kernel.print(*e); end
-    def puts(*e) concat(e); Kernel.puts(*e); end
-    def flush; end
-  end
-
-  if Spec::VERSION::STRING >= '1.1.1'
-    options = ::Spec::Runner::OptionParser.parse(['spec'], stderr, stdout)
-    ::Spec::Runner::CommandLine.run(options)
-  else
-    ::Spec::Runner::CommandLine.run(['spec'], stderr, stdout, false, true)
-  end
-
-  exit_status = stdout.last.strip[/(\d+) failures?/, 1].to_i
-
-  at_exit{
-    exit(exit_status == 0 ? 0 : 1)
-  }
 end
 
 desc "run rspec"

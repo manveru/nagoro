@@ -37,19 +37,19 @@ describe 'Nagoro::Template' do
     template = Nagoro::Template[]
     template.pipes.should == []
     template = Nagoro::Template[*Nagoro::DEFAULT_PIPES]
-    template.pipes.should have(Nagoro::DEFAULT_PIPES.size).pipes
+    template.pipes.size.should == Nagoro::DEFAULT_PIPES.size
     template.pipes.each do |pipe|
-      pipe.should respond_to(:process)
+      pipe.should.respond_to(:process)
     end
   end
 
   it 'should set up with ::new' do
     template = Nagoro::Template.new(:pipes => [])
-    template.pipes.should be_empty
+    template.pipes.should.be.empty
     template = Nagoro::Template.new(:pipes => Nagoro::DEFAULT_PIPES)
-    template.pipes.should have(Nagoro::DEFAULT_PIPES.size).pipes
+    template.pipes.size.should == Nagoro::DEFAULT_PIPES.size
     template.pipes.each do |pipe|
-      pipe.should respond_to(:process)
+      pipe.should.respond_to(:process)
     end
   end
 
