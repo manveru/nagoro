@@ -23,6 +23,7 @@ DESCRIPTION = "An extendable templating engine in pure ruby"
 HOMEPATH = 'http://nagoro.rubyforge.org'
 BIN_FILES = %w( )
 RDOC_FILES = %w[ lib ]
+DEPENDENCIES = {}
 RDOC_OPTS = %w[
   --all
   --quiet
@@ -38,6 +39,26 @@ BASEDIR = File.expand_path(File.dirname(__FILE__))
 
 NAME = "nagoro"
 VERS = Nagoro::VERSION
+
+task 'run-spec' do
+  Dir['spec/*/**/*.rb'].each do |file|
+    ruby file
+  end
+end
+
+desc "run rspec"
+task :spec do
+  engine = ENV['NAGORO_ENGINE']
+  %w[stringscanner libxml rexml].each do |env|
+    puts
+    puts "Run specs for: #{env}".center(75)
+    ENV['NAGORO_ENGINE'] = env
+    sh("rake run-spec")
+  end
+  ENV['NAGORO_ENGINE'] = engine
+end
+
+task :default => :spec
 
 GemSpec =
     Gem::Specification.new do |s|
@@ -84,22 +105,42 @@ task :uninstall => [:clean] do
   sh %{sudo gem uninstall #{NAME}}
 end
 
-task 'run-spec' do
-  Dir['spec/*/**/*.rb'].each do |file|
-    ruby file
-  end
-end
+desc "Create an updated version of /#{NAME}.gemspec"
+task :gemspec do
+  gemspec = <<-OUT.strip
+Gem::Specification.new do |s|
+  s.name = %name%
+  s.version = %version%
 
-desc "run rspec"
-task :spec do
-  engine = ENV['NAGORO_ENGINE']
-  %w[stringscanner libxml rexml].each do |env|
-    puts
-    puts "Run specs for: #{env}".center(75)
-    ENV['NAGORO_ENGINE'] = env
-    sh("rake run-spec")
-  end
-  ENV['NAGORO_ENGINE'] = engine
-end
+  s.summary = %summary%
+  s.description = %description%
+  s.platform = %platform%
+  s.has_rdoc = %has_rdoc%
+  s.author = %author%
+  s.email = %email%
+  s.homepage = %homepage%
+  s.executables = %executables%
+  s.bindir = %bindir%
+  s.require_path = %require_path%
 
-task :default => :spec
+  %dependencies%
+
+  s.files = %files%
+end
+  OUT
+
+  gemspec.gsub!(/%(\w+)%/) do
+    case key = $1
+    when 'version'
+      GemSpec.version.to_s.dump
+    when 'dependencies'
+      DEPENDENCIES.map{|l, v|
+        "s.add_dependency(%p, %p)" % [l, v]
+      }.join("\n  ")
+    else
+      GemSpec.send($1).pretty_inspect.strip
+    end
+  end
+
+  File.open("#{NAME}.gemspec", 'w+'){|file| file.puts(gemspec) }
+end
