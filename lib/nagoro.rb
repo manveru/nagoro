@@ -1,6 +1,6 @@
 class Hash
   def to_tag_params
-    map{|k,v| %(#{k}="#{v}") }.join(' ')
+    map{|k,v| %( #{k}="#{v}") }.join
   end
 end
 
