@@ -5,6 +5,9 @@ module Nagoro
     class XMLReader
       CONST_NAMES = {}
 
+      # FIXME: This has no effect on XML::Reader
+      XML::Parser::default_substitute_entities = false
+
       XML::Reader.constants.each do |const|
         name = const.gsub(/TYPE_/, '').downcase
         CONST_NAMES[XML::Reader.const_get(const)] = name
