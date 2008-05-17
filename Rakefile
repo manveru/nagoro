@@ -41,56 +41,50 @@ NAME = "nagoro"
 VERS = Nagoro::VERSION
 
 task 'run-spec' do
+  require 'lib/nagoro'
+
   Dir['spec/*/**/*.rb'].each do |file|
-    ruby file
+    next if file =~ /base/ and Nagoro::ENGINE != :stringscanner
+    load file
   end
 end
 
-desc "run rspec"
+desc "run specs for all engines"
 task :spec do
-  engine = ENV['NAGORO_ENGINE']
-  %w[stringscanner libxml rexml].each do |env|
+  require 'lib/nagoro'
+
+  Nagoro::ENGINES.each do |engine|
     puts
-    puts "Run specs for: #{env}".center(75)
-    ENV['NAGORO_ENGINE'] = env
-    sh("rake run-spec")
+    puts "Run specs for: #{engine}"
+    sh "rake run-spec NAGORO_ENGINE=#{engine}"
   end
-  ENV['NAGORO_ENGINE'] = engine
 end
 
 task :default => :spec
 
 GemSpec =
     Gem::Specification.new do |s|
-        s.name = NAME
-        s.version = VERS
-        s.platform = Gem::Platform::RUBY
-        s.has_rdoc = true
-        s.extra_rdoc_files = RDOC_FILES
-        s.rdoc_options += RDOC_OPTS
-        s.summary = DESCRIPTION
-        s.description = DESCRIPTION
-        s.author = AUTHOR
-        s.email = EMAIL
-        s.homepage = HOMEPATH
-        s.executables = BIN_FILES
-        # s.bindir = "bin"
-        s.require_path = "lib"
-        # s.post_install_message = POST_INSTALL_MESSAGE
+      s.name = NAME
+      s.version = VERS
+      s.platform = Gem::Platform::RUBY
+      s.has_rdoc = true
+      s.extra_rdoc_files = RDOC_FILES
+      s.rdoc_options += RDOC_OPTS
+      s.summary = DESCRIPTION
+      s.description = DESCRIPTION
+      s.author = AUTHOR
+      s.email = EMAIL
+      s.homepage = HOMEPATH
+      s.executables = BIN_FILES
+      # s.bindir = "bin"
+      s.require_path = "lib"
 
-        # s.add_dependency('rake', '>=0.7.3')
-        # s.add_dependency('rspec', '>=1.0.2')
-        # s.add_dependency('rack', '>=0.2.0')
-        # s.required_ruby_version = '>= 1.8.5'
-
-        s.files = (RDOC_FILES + %w[Rakefile] + Dir["{spec,lib}/**/*"]).uniq
-
-        # s.extensions = FileList["ext/**/extconf.rb"].to_a
+      s.files = (RDOC_FILES + %w[Rakefile] + Dir["{spec,lib}/**/*"]).uniq
     end
 
 Rake::GemPackageTask.new(GemSpec) do |p|
-    p.need_tar = true
-    p.gem_spec = GemSpec
+  p.need_tar = true
+  p.gem_spec = GemSpec
 end
 
 desc "package and install ramaze"

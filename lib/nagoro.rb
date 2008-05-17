@@ -28,34 +28,14 @@ require 'nagoro/pipe/include'
 require 'nagoro/pipe/compile'
 
 module Nagoro
-  class << self
-    def load_libxml
-      require "nagoro/wrap/libxml"
-      :libxml
-    end
+  ENGINES = [:stringscanner, :libxml, :rexml]
+  ENGINE = nil
 
-    def load_rexml
-      # puts "Please install libxml-ruby for better performance, using REXML now."
-      require 'nagoro/wrap/rexml'
-      :rexml
-    end
-
-    def load_stringscanner
-      require 'nagoro/wrap/stringscanner'
-      :stringscanner
-    end
+  def self.engine=(name)
+    require "nagoro/wrap/#{name}"
+    remove_const('ENGINE') if defined?(Nagoro::ENGINE)
+    const_set('ENGINE', name.to_sym)
   end
+
+  self.engine = ENV['NAGORO_ENGINE'] || 'stringscanner'
 end
-
-engine = ENV['NAGORO_ENGINE'] || 'stringscanner'
-engine = engine.downcase
-
-engine =
-  begin
-    Nagoro.send("load_#{engine}")
-  rescue LoadError => ex
-    puts ex
-    Nagoro::load_rexml
-  end
-
-Nagoro::ENGINE = engine
