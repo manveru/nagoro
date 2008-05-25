@@ -182,7 +182,7 @@ get a good coverage despite that.
   For the Nitro web framework. Its templating engine has been the inspiration
   for nagoro.
 
-* Johannes Buch a.k.a. Kashia
+* Jonathan Buch a.k.a. Kashia
 
   For the first implementation of the Localization mechanism which is mostly
   ported from Ramaze.
