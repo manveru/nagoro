@@ -1,11 +1,3 @@
-module Nagoro #:nodoc:
-  module Version #:nodoc:
-    MAJOR = 0
-    MINOR = 0
-    TINY  = 3
-
-    STRING = [MAJOR, MINOR, TINY].join('.')
-  end
-
-  VERSION = Version::STRING
+module Nagoro
+  VERSION = '2008.07.14'
 end

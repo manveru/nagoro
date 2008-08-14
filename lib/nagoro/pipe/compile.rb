@@ -15,7 +15,7 @@ module Nagoro
       end
 
       def result
-        "_out_ = []; _out_ << %Q`#{@body.join}`; _out_.join"
+        "_out_ = []; _out_ << %Q`#{super}`; _out_.join"
       end
 
       def compile(template)

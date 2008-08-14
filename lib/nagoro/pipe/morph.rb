@@ -1,6 +1,5 @@
 module Nagoro
   module Pipe
-
     # Morph is a search and replace system based on parameters of opening
     # tags.
     #
@@ -43,29 +42,18 @@ module Nagoro
     #   # <?r end ?>
     #
     # How to add new morphs:
-    #   Nagoro::Pipe::Morph['until'] = {
-    #       :open  => '<?r %morph %expression ?>',
-    #       :close => '<?r end ?>'
-    #     }
+    #   Nagoro::Pipe::Morph['until'] = [
+    #     '<?r %morph %expression ?>', '<?r end ?>' ]
 
     class Morph < Base
       MORPHS = {
-        'each' => {
-          :open => '<?r %expression.%morph do |_e| ?>',
-          :close => '<?r end ?>',
-        },
-        'times' => {
-          :open => '<?r %expression.%morph do |_t| ?>',
-          :close => '<?r end ?>',
-        },
-        'filter' => {
-          :open => '<?ro %expression(%<', :close => '>) ?>',
-        },
+        'each'   => [ '<?r %expression.%morph do |_e| ?>', '<?r end ?>' ],
+        'times'  => [ '<?r %expression.%morph do |_t| ?>', '<?r end ?>' ],
+        'filter' => [ '<?o %expression(%<', '>) ?>' ],
       }
 
       %w[if unless for].each do |morph|
-        MORPHS[morph] = {
-          :open => '<?r %morph %expression ?>', :close => '<?r end ?>' }
+        MORPHS[morph] = [ '<?r %morph %expression ?>', '<?r end ?>' ]
       end
 
       def tag_start(tag, hash)
@@ -77,7 +65,7 @@ module Nagoro
         elsif morphs.size == 1
           morph = morphs.first
           value = hash.delete(morph)
-          open = MORPHS[morph][:open]
+          open = MORPHS[morph][0]
 
           append open.gsub(/%morph/, morph).gsub(/%expression/, value)
           @stack << [tag, morph]
@@ -89,7 +77,7 @@ module Nagoro
         super
         prev, morph = @stack.last
         return unless prev == tag
-        append(MORPHS[morph][:close])
+        append(MORPHS[morph][1])
         @stack.pop
       end
 

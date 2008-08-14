@@ -37,7 +37,7 @@ module Nagoro
         end
       end
 
-      def process(template)
+      def call(template)
         @template = template
         @template.gsub!(CONFIG[:regex]) do |e|
           localize($1)

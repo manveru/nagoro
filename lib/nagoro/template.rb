@@ -1,11 +1,90 @@
+require 'nagoro/scanner'
+require 'nagoro/binding'
+require 'nagoro/element'
+
+require 'nagoro/pipe/base'
+require 'nagoro/pipe/compile'
+require 'nagoro/pipe/element'
+require 'nagoro/pipe/include'
+require 'nagoro/pipe/instruction'
+# require 'nagoro/pipe/localization'
+require 'nagoro/pipe/morph'
+
+module Nagoro
+  DEFAULT_PIPES = [ Pipe::Element, Pipe::Morph, Pipe::Include,
+                    Pipe::Instruction, Pipe::Compile ]
+  DEFAULT_FILE = '<nagoro eval>'
+
+  class Template
+    def self.[](*pipes)
+      new(:pipes => pipes.flatten)
+    end
+
+    attr_accessor :binding, :file, :pipes, :compiled
+
+    def initialize(options = {})
+      parse_option(options)
+      @compiled = false
+    end
+
+    def parse_option(options = {})
+      @binding = options.fetch(:binding, BindingProvider.binding)
+      @file = options.fetch(:file, DEFAULT_FILE)
+      @pipes = options.fetch(:pipes, DEFAULT_PIPES)
+    end
+
+    def compile(io, options = {})
+      parse_option(options) unless options.empty?
+
+      case io
+      when String
+        io = File.read(io) if File.file?(io)
+        @compiled = pipeline(io)
+      when StringIO, IO
+        @compiled = pipeline(io.read)
+      else
+        raise("Cannot compile %p" % io)
+      end
+
+      return self
+    end
+
+    # use inject?
+    def pipeline(io)
+      @pipes.each do |pipe|
+        if pipe.respond_to?(:new)
+          io = pipe.new(io).result
+        else
+          io = Pipe.const_get(pipe).new(io).result
+        end
+      end
+      return io
+    end
+
+    def result(options = {})
+      parse_option(options) unless options.empty?
+      eval(@compiled, @binding, @file).strip
+    end
+
+    def render(io, options = {})
+      compile(io, options).result
+    end
+  end
+end
+
+__END__
+require 'logger'
+
 module Nagoro
   DEFAULT_PIPES = [ :Element, :Morph, :Include, :Instruction, :Compile ]
+  DEFAULT_FILE = '<nagoro eval>'
 
   class << self
     # options
     #   :file
     #   :pipes
     #   :binding
+    #   :logger
     #
     def render(obj, options = {})
       compile(obj, options).result
@@ -39,7 +118,7 @@ module Nagoro
     end
   end
 
-  class TemplateEmptyBindingSpace
+  class CleanBinding
     # provide 'empty' binding as public method
     def self.binding
       super
@@ -51,36 +130,30 @@ module Nagoro
       new(:pipes => pipes)
     end
 
-    attr_accessor :pipes, :compiled, :options
+    attr_accessor :pipes, :compiled
+
+    # options
+    attr_accessor :binding, :pipes, :logger, :file
 
     def initialize(options = {})
-      @options = {
-        :binding => TemplateEmptyBindingSpace.binding,
-        :pipes => DEFAULT_PIPES,
-      }.merge(options)
-
-      @pipes = [@options[:pipes]].flatten.map{|pipe|
-        if pipe.respond_to?(:process)
-          pipe
-        else
-          Pipe.const_get(pipe).new
-        end
-      }
+      apply_options(options)
     end
 
     def compile_file(filename)
       raise "File does not exist" unless File.file?(filename)
-      file = File.new(filename)
-      compile_io(file, filename)
-    ensure
-      file.close unless file.closed?
+
+      File.open(filename) do |file|
+        compile_io(file, filename)
+      end
+
       self
     end
 
     def compile_io(io, filename = '<nagoro eval>')
-      options[:file] ||= filename
+      @file = filename
       string = io.respond_to?(:read) ? io.read : io.to_str
       @compiled = pipeline(string)
+
       self
     end
 
@@ -89,7 +162,7 @@ module Nagoro
 
       pipes.each do |pipe|
         pipe.reset
-        pipe.process(template)
+        pipe.call(template)
         template = pipe.result
       end
 
@@ -97,11 +170,23 @@ module Nagoro
     end
 
     def result(options = {})
-      @options.merge!(options)
-      binding, file = @options.values_at(:binding, :file)
+      apply_options(options)
+
       raise(RuntimeError, "Compile or filter first") unless @compiled
       raise(ArgumentError, "Binding required for eval") unless binding
       eval(@compiled, binding, file).strip
+    end
+
+    def apply_options(options = {})
+      @binding = options[ :binding ] || CleanBinding.binding
+      @file    = options[ :file    ] || DEFAULT_FILE
+      @logger  = options[ :logger  ] || Logger.new($stderr)
+      @pipes   = options[ :pipes   ] || DEFAULT_PIPES
+
+      @pipes = @pipes.to_ary.map{|pipe|
+        next(pipe) if pipe.respond_to?(:call)
+        Pipe.const_get(pipe).new
+      }
     end
   end
 end
