@@ -1,16 +1,18 @@
 require 'spec/helper'
 
-describe "[#{Nagoro::ENGINE}] Nagoro::Listener::Base" do
+describe "Nagoro::Listener::Base" do
   def base(string)
     nagoro = Nagoro::Template[:Base]
     nagoro.pipeline(string)
   end
 
-  break unless Nagoro::ENGINE == :stringscanner
+  should 'not fail on backslash' do
+    base('#{}').should == '#{}'
+  end
 
   it 'should not stumble over HTML entities' do
     %w[gt lt quot amp nbsp uuml].each do |entity|
-      str = "&#{entity};" 
+      str = "&#{entity};"
       base(str).should == str
     end
   end

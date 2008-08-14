@@ -1,9 +1,9 @@
 require 'spec/helper'
 
-describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Instruction" do
+describe "Nagoro::Pipe::Instruction" do
   behaves_like 'xpath'
   def compile(obj)
-    Nagoro::compile(obj, :pipes => :Instruction).compiled
+    Nagoro::Template[Nagoro::Pipe::Instruction].compile(obj).compiled
   end
 
   it 'should expand <?js code ?>' do

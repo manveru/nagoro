@@ -1,9 +1,10 @@
 require 'spec/helper'
 
-describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Element" do
+describe "Nagoro::Pipe::Element" do
   behaves_like 'xpath'
+
   def compile(obj)
-    Nagoro::compile(obj, :pipes => :Element).compiled
+    Nagoro::Template[Nagoro::Pipe::Element].compile(obj).compiled
   end
 
   Nagoro.element('Page') do |content, attrs|
@@ -37,7 +38,7 @@ describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Element" do
   end
 
   it 'should render file-elements' do
-    doc = compile('example/hello.nag')
+    doc = compile(File.read('example/hello.nag'))
     doc.should.not.be.empty
     xpath(doc, '//title').first.text.should == 'Hello, World!'
     xpath(doc, '//h1').first.text.should == 'Hello, World!'

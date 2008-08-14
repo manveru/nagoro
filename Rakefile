@@ -40,23 +40,11 @@ BASEDIR = File.expand_path(File.dirname(__FILE__))
 NAME = "nagoro"
 VERS = Nagoro::VERSION
 
-task 'run-spec' do
-  require 'lib/nagoro'
-
-  Dir['spec/*/**/*.rb'].each do |file|
-    next if file =~ /base/ and Nagoro::ENGINE != :stringscanner
-    load file
-  end
-end
-
-desc "run specs for all engines"
 task :spec do
   require 'lib/nagoro'
 
-  Nagoro::ENGINES.each do |engine|
-    puts
-    puts "Run specs for: #{engine}"
-    sh "rake run-spec NAGORO_ENGINE=#{engine}"
+  Dir['spec/*/**/*.rb'].each do |file|
+    load file
   end
 end
 

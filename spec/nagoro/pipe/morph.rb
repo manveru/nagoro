@@ -1,8 +1,8 @@
 require 'spec/helper'
 
-describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Instruction" do
+describe "Nagoro::Pipe::Morph" do
   def compile(obj)
-    Nagoro::compile(obj, :pipes => :Morph).compiled
+    Nagoro::Template[Nagoro::Pipe::Morph].compile(obj).compiled
   end
 
   it 'should morph single tag' do
@@ -42,6 +42,6 @@ describe "[#{Nagoro::ENGINE}] Nagoro::Pipe::Instruction" do
 
   it 'should morph filter' do
     compile('<p filter="my_filter">x</p>').
-      should == '<?ro my_filter(%<<p>x</p>>) ?>'
+      should == '<?o my_filter(%<<p>x</p>>) ?>'
   end
 end

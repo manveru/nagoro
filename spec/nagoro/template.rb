@@ -1,6 +1,6 @@
 require 'spec/helper'
 
-describe "[#{Nagoro::ENGINE}] Nagoro" do
+describe "Nagoro" do
   it 'should ::compile from filename' do
     file = __DIR__/'template/hello.nag'
     template = Nagoro.compile(file)
@@ -32,15 +32,12 @@ describe "[#{Nagoro::ENGINE}] Nagoro" do
   end
 end
 
-describe "[#{Nagoro::ENGINE}] Nagoro::Template" do
+describe "Nagoro::Template" do
   it 'should set up with ::[]' do
     template = Nagoro::Template[]
     template.pipes.should == []
     template = Nagoro::Template[*Nagoro::DEFAULT_PIPES]
     template.pipes.size.should == Nagoro::DEFAULT_PIPES.size
-    template.pipes.each do |pipe|
-      pipe.should.respond_to(:process)
-    end
   end
 
   it 'should set up with ::new' do
@@ -48,9 +45,6 @@ describe "[#{Nagoro::ENGINE}] Nagoro::Template" do
     template.pipes.should.be.empty
     template = Nagoro::Template.new(:pipes => Nagoro::DEFAULT_PIPES)
     template.pipes.size.should == Nagoro::DEFAULT_PIPES.size
-    template.pipes.each do |pipe|
-      pipe.should.respond_to(:process)
-    end
   end
 
   it 'should not open/close empty tags' do
