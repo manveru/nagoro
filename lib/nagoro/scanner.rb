@@ -11,7 +11,7 @@ module Nagoro
       until @scanner.eos?
         pos = @scanner.pos
         run
-        raise("Scanner didn't move: %p" % scanner) if pos == @scanner.pos
+        raise("Scanner didn't move: %p" % @scanner) if pos == @scanner.pos
       end
     end
 
