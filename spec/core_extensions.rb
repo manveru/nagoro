@@ -9,7 +9,7 @@ module Kernel
   #  File.expand_path(File.dirname(__FILE__))
   # idiom.
   #
-  unless defined?__DIR__
+  unless defined?(__DIR__)
     def __DIR__()
       filename = caller[0][/(.*?):/, 1]
       File.expand_path(File.dirname(filename))
