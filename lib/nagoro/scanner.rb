@@ -1,49 +1,65 @@
 require 'strscan'
 
 module Nagoro
-  class Scanner
+  class Scanner < StringScanner
+    TEXT = /[^<>]+/m
+    DOCTYPE = /<!DOCTYPE([^>]+)>/m
+
+    TAG_START       = /<([^\s>]+)/n
+    TAG_END         = /<\/([^>]*)>/
+    TAG_OPEN_END    = /\s*>/n
+    TAG_CLOSING_END = /\s*\/>/n
+    TAG_PARAMETER   = /\s*([^\s]*)=(['"])(.*?)\2/um
+
+    INSTRUCTION_START = /<\?(\S+)/n
+    INSTRUCTION_END   = /(.*?)(\?>)/um
+
+    RUBY_INTERP_START = /#\{/
+    RUBY_INTERP_END   = /(?=\})/
+
     def initialize(string, callback)
-      @string, @callback = string, callback
-      @scanner = StringScanner.new(string)
+      @callback = callback
+      super(string)
     end
 
     def stream
-      until @scanner.eos?
-        pos = @scanner.pos
+      until eos?
+        pos = self.pos
         run
-        raise("Scanner didn't move: %p" % @scanner) if pos == @scanner.pos
+        raise("Scanner didn't move: %p" % self) if pos == self.pos
       end
     end
 
     def run
-      if    @scanner.scan( /<\?([^\s]+)/ ); instruction @scanner[1]
-      elsif @scanner.scan( /<\/(.*?)>/   );     tag_end @scanner[1]
-      elsif @scanner.scan( /#\{/         ); ruby_interp @scanner.matched
-      elsif @scanner.scan( /<([^\s>]+)/  );   tag_start @scanner[1]
-      elsif @scanner.scan( /[^<>]+/mu    );        text @scanner.matched
+      if    scan(DOCTYPE          ); doctype(self[1])
+      elsif scan(INSTRUCTION_START); instruction(self[1])
+      elsif scan(TAG_END          ); tag_end(self[1])
+      elsif scan(RUBY_INTERP_START); ruby_interp(self.matched)
+      elsif scan(TAG_START        ); tag_start(self[1])
+      elsif scan(TEXT             ); text(self.matched)
       end
     end
 
     def instruction(name)
-      @scanner.scan(/(.*?)(\?>)/)
-      @callback.instruction(name, @scanner[1])
+      scan(INSTRUCTION_END)
+      @callback.instruction(name, self[1])
     end
 
     def ruby_interp(string)
-      string << @scanner.scan_until(/(?=\})/)
+      string << scan_until(RUBY_INTERP_END)
       @callback.text(string)
     end
 
     def tag_start(name)
       args = {}
 
-      while @scanner.scan(/\s*([^\s]*)=(['"])(.*?)\2/)
-        args[@scanner[1]] = @scanner[3]
+      while scan(TAG_PARAMETER)
+        args[self[1]] = self[3]
       end
 
       @callback.tag_start(name, args)
-      return @callback.tag_end(name) if @scanner.scan(/\s*\/>/)
-      @scanner.scan(/\s*>/)
+      return @callback.tag_end(name) if scan(TAG_CLOSING_END)
+      scan(TAG_OPEN_END)
     end
 
     def tag_end(name)
@@ -52,6 +68,10 @@ module Nagoro
 
     def text(string)
       @callback.text(string)
+    end
+
+    def doctype(string)
+      @callback.doctype(string)
     end
   end
 end
