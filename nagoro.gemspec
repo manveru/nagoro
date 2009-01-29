@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "nagoro"
-  s.version = "0.0.3"
+  s.version = "2009.01.29"
 
   s.summary = "An extendable templating engine in pure ruby"
   s.description = "An extendable templating engine in pure ruby"
@@ -31,11 +31,12 @@ Gem::Specification.new do |s|
  "spec/nagoro/pipe/instruction.rb",
  "spec/nagoro/pipe/morph.rb",
  "spec/nagoro/template",
+ "spec/nagoro/template/full.nag",
  "spec/nagoro/template/hello.nag",
  "spec/nagoro/template.rb",
  "lib/nagoro",
+ "lib/nagoro/binding.rb",
  "lib/nagoro/element.rb",
- "lib/nagoro/error.rb",
  "lib/nagoro/pipe",
  "lib/nagoro/pipe/base.rb",
  "lib/nagoro/pipe/compile.rb",
@@ -44,11 +45,8 @@ Gem::Specification.new do |s|
  "lib/nagoro/pipe/instruction.rb",
  "lib/nagoro/pipe/localization.rb",
  "lib/nagoro/pipe/morph.rb",
+ "lib/nagoro/scanner.rb",
  "lib/nagoro/template.rb",
  "lib/nagoro/version.rb",
- "lib/nagoro/wrap",
- "lib/nagoro/wrap/libxml.rb",
- "lib/nagoro/wrap/rexml.rb",
- "lib/nagoro/wrap/stringscanner.rb",
  "lib/nagoro.rb"]
 end
