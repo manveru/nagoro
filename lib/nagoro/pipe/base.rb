@@ -47,6 +47,11 @@ module Nagoro
       def tag_with(tag, hash)
         "<#{tag}#{hash.map{|k,v| %( #{k}="#{v}") }.join}"
       end
+
+      def doctype(string)
+        string.strip!
+        append "<!DOCTYPE #{string}>"
+      end
     end
   end
 end
