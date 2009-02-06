@@ -48,7 +48,7 @@ breakage and give a good overview of nagoros capabilities.
   currently the "best" engine is hand-written using StringScanner.
 
   * StringScanner
-  
+
     StringScanner is a part of Ruby standard library that provides lexical
     scanning operations on a String.
     It is mostly implemented in C, which makes it quite fast and efficient.
@@ -56,29 +56,7 @@ breakage and give a good overview of nagoros capabilities.
     code inside the templates, this will be the engine you want to use most
     likely.
 
-  * libxml-ruby
-  
-    These are the Ruby bindings for GNU/LibXML2, we are using the SaX2 interface.
-    It should give you the best performance on large and standard conform
-    documents, but it doesn't allow for arbitrary code inside the template as
-    we have to feed it the document before doing any transformation or
-    interpolation.
 
-  * REXML
-
-    REXML is a _pure_ Ruby, XML 1.0 conforming, non-validating toolkit with an
-    intuitive API.  REXML passes 100% of the non-validating Oasis tests, and
-    provides tree, stream, SAX2, pull, and lightweight APIs.  REXML also
-    includes a full XPath 1.0 implementation.
-    Since Ruby 1.8, REXML is included in the standard Ruby distribution.
-
-    REXML was used for the first implementations of Nagoro, but for performance
-    reasons libxml and StringScanner were introduced later on.
-    It here is mostly to give a third example of how to wrap an engine or to
-    give an idea of how a document would behave if it was fed into libxml as
-    both are strict parsers.
-
-    
 # Installation
 
 
