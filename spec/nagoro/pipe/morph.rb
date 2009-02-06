@@ -25,8 +25,8 @@ describe "Nagoro::Pipe::Morph" do
       should == '<?r unless 1 ?><p>x</p><?r end ?>'
   end
 
-  it 'should morph for' do
-    compile('<p for="i in 1..10">#{i}</p>').
+  it 'should morph foreach' do
+    compile('<p foreach="i in 1..10">#{i}</p>').
       should == '<?r for i in 1..10 ?><p>#{i}</p><?r end ?>'
   end
 

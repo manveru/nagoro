@@ -4,7 +4,7 @@ module Nagoro
     # tags.
     #
     # Available morphs are at the time of writing:
-    # each, filter, for, if, times, unless
+    # each, filter, foreach, if, times, unless
     #
     # Please take care not to use multiple morphable parameters in one tag, due
     # to restrictions of the implementation of REXML and libxml there is no way
@@ -23,7 +23,7 @@ module Nagoro
     #   #   <a href="/login">Login to your account
     #   # <?r end ?>
     #
-    #   <div for="tag in @tags" class="tag">#{tag}</div>
+    #   <div foreach="tag in @tags" class="tag">#{tag}</div>
     #   # <?r for tag in @tags ?>
     #   #  <div class="tag">#{tag}</div>
     #   # <?r end ?>
@@ -47,14 +47,13 @@ module Nagoro
 
     class Morph < Base
       MORPHS = {
-        'each'   => [ '<?r %expression.%morph do |_e| ?>', '<?r end ?>' ],
-        'times'  => [ '<?r %expression.%morph do |_t| ?>', '<?r end ?>' ],
-        'filter' => [ '<?o %expression(%<', '>) ?>' ],
+        'each'    => [ '<?r %expression.%morph do |_e| ?>', '<?r end ?>' ],
+        'times'   => [ '<?r %expression.%morph do |_t| ?>', '<?r end ?>' ],
+        'filter'  => [ '<?o %expression(%<', '>) ?>' ],
+        'if'      => [ '<?r %morph %expression ?>', '<?r end ?>' ],
+        'unless'  => [ '<?r %morph %expression ?>', '<?r end ?>' ],
+        'foreach' => [ '<?r for %expression ?>', '<?r end ?>' ],
       }
-
-      %w[if unless for].each do |morph|
-        MORPHS[morph] = [ '<?r %morph %expression ?>', '<?r end ?>' ]
-      end
 
       def tag_start(tag, hash)
         morphs = hash.keys & MORPHS.keys
