@@ -30,10 +30,10 @@ module Nagoro
 
     def parse_option(options = {})
       @binding   = options.fetch(:binding, BindingProvider.binding)
-      @file      = options.fetch(:filename, DEFAULT_FILE)
-      @line      = options.fetch(:line, DEFAULT_LINE)
-      @pipes     = options.fetch(:pipes, DEFAULT_PIPES)
-      @variables = options.fetch(:variables, nil)
+      @file      = options[:filename] || DEFAULT_FILE
+      @line      = options[:line] || DEFAULT_LINE
+      @pipes     = options[:pipes] || DEFAULT_PIPES
+      @variables = options[:variables]
     end
 
     def compile(io, options = {})
