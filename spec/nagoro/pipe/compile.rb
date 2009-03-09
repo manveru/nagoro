@@ -20,4 +20,12 @@ describe "Nagoro::Pipe::Compile" do
     render('<?r a = 1 ?>#{a > 1}').should == 'false'
     render('<?r a = 1 ?>#{a < 1}').should == 'false'
   end
+
+  should 'not fail on nested {} inside #{}' do
+    render('#{"Hello, {World}!"}').should == 'Hello, {World}!'
+  end
+
+  should 'not fail on > inside ruby instruction' do
+    render('#{{:hi => :there}[:hi]}').should == 'there'
+  end
 end
