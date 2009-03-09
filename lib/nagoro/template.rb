@@ -14,6 +14,7 @@ module Nagoro
   DEFAULT_PIPES = [ Pipe::Element, Pipe::Morph, Pipe::Include,
                     Pipe::Instruction, Pipe::Compile ]
   DEFAULT_FILE = '<nagoro eval>'
+  DEFAULT_LINE = 1
 
   class Template
     def self.[](*pipes)
@@ -29,7 +30,8 @@ module Nagoro
 
     def parse_option(options = {})
       @binding   = options.fetch(:binding, BindingProvider.binding)
-      @file      = options.fetch(:file, DEFAULT_FILE)
+      @file      = options.fetch(:filename, DEFAULT_FILE)
+      @line      = options.fetch(:line, DEFAULT_LINE)
       @pipes     = options.fetch(:pipes, DEFAULT_PIPES)
       @variables = options.fetch(:variables, nil)
     end
@@ -73,7 +75,7 @@ module Nagoro
         ))
       end
 
-      eval(@compiled, @binding, @file).strip
+      eval(@compiled, @binding, @file, @line).strip
     end
 
     def render(io, options = {})
