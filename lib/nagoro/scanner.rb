@@ -6,7 +6,7 @@ module Nagoro
     DOCTYPE = /<!DOCTYPE([^>]+)>/m
 
     TAG_START       = /<([^\s>]+)/n
-    TAG_END         = /<\/([^>]*)>/
+    TAG_END         = /<\/([^>]*)>/n
     TAG_OPEN_END    = /\s*>/n
     TAG_CLOSING_END = /\s*\/>/n
     TAG_PARAMETER   = /\s*([^\s]*)=(['"])(.*?)\2/um
@@ -14,8 +14,8 @@ module Nagoro
     INSTRUCTION_START = /<\?(\S+)/n
     INSTRUCTION_END   = /(.*?)(\?>)/um
 
-    RUBY_INTERP_START = /#\{/
-    RUBY_INTERP_END   = /(?=\})/
+    RUBY_INTERP_START = /\s*#\{/nm
+    RUBY_INTERP_END   = /(?=\})/n
 
     def initialize(string, callback)
       @callback = callback
