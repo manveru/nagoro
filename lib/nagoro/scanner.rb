@@ -15,6 +15,8 @@ module Nagoro
     INSTRUCTION_END   = /(.*?)(\?>)/um
 
     RUBY_INTERP_START = /\s*#\{/nm
+    RUBY_INTERP_TEXT  = /[^\{\}]+/n
+    RUBY_INTERP_NEST  = /\{[^\}]*\}/nm
     RUBY_INTERP_END   = /(?=\})/n
 
     def initialize(string, callback)
@@ -34,9 +36,9 @@ module Nagoro
       if    scan(DOCTYPE          ); doctype(self[1])
       elsif scan(INSTRUCTION_START); instruction(self[1])
       elsif scan(TAG_END          ); tag_end(self[1])
-      elsif scan(RUBY_INTERP_START); ruby_interp(self.matched)
+      elsif scan(RUBY_INTERP_START); ruby_interp(matched)
       elsif scan(TAG_START        ); tag_start(self[1])
-      elsif scan(TEXT             ); text(self.matched)
+      elsif scan(TEXT             ); text(matched)
       end
     end
 
@@ -46,7 +48,18 @@ module Nagoro
     end
 
     def ruby_interp(string)
-      string << scan_until(RUBY_INTERP_END)
+      done = false
+
+      until done
+        if    scan(RUBY_INTERP_TEXT)
+          string << matched
+        elsif scan(RUBY_INTERP_NEST)
+          string << matched
+        elsif scan(RUBY_INTERP_END)
+          done = true
+        end
+      end
+
       @callback.text(string)
     end
 
