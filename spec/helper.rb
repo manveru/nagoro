@@ -10,7 +10,6 @@ require 'rubygems'
 require 'bacon'
 
 Bacon.summary_on_exit
-Bacon.extend(Bacon::TestUnitOutput)
 
 shared 'xpath' do
   def xpath(string, path)
