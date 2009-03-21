@@ -13,4 +13,8 @@ module Nagoro
   def self.render(obj, options = {})
     compile(obj, options).result
   end
+
+  def self.tidy_render(obj, options = {})
+    compile(obj, options).tidy_result
+  end
 end
