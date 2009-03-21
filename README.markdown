@@ -42,19 +42,14 @@ breakage and give a good overview of nagoros capabilities.
 
     Custom tag parameters like `<div if="cond">condition is fulfilled</div>`
 
-* Engines
+* Nagoro::Scanner
 
-  Nagoro utilizes different engines to accomplish template transformation,
-  currently the "best" engine is hand-written using StringScanner.
-
-  * StringScanner
-
-    StringScanner is a part of Ruby standard library that provides lexical
-    scanning operations on a String.
-    It is mostly implemented in C, which makes it quite fast and efficient.
-    Our implementation is not a strict XML/SGML parser and allows for arbitrary
-    code inside the templates, this will be the engine you want to use most
-    likely.
+  A hand-rolled SaX style parser for templates using StringScanner.
+  StringScanner is a part of Ruby standard library that provides lexical
+  scanning operations on a String.
+  It is mostly implemented in C, which makes it quite fast and efficient.
+  Our implementation is not a strict XML/SGML parser and allows for arbitrary
+  code inside the templates.
 
 
 # Installation
@@ -110,31 +105,52 @@ breakage and give a good overview of nagoros capabilities.
 See the installation section for how to install nagoro.
 After installation you can use nagoro in a couple of ways
 
-* CLI
+## CLI
 
   From commandline using the `nagoro` executable.
 
         $ nagoro yourfile.xhtml
 
-* In Ruby
+## In Ruby
 
-  Using `Nagoro::render_file`
+### Compiling a template
 
-        nagoro = Nagoro.render_file('yourfile.xhtml')
-        xhtml = nagoro.result(binding)
-        puts xhtml
+Template compilation is useful if you have templates that have contents that
+will not change for some time, it will only run it through the pipes once and
+do an eval on the compiled string every time you call the `Template#result` or
+`Template#tidy_result` methods on the returned Template instance.
 
-  Using Nagoro::render
+    template = Nagoro.compile('<?r a = 42 ?>#{a * 42}')
+    puts template.result
+    puts '', 'And now tidy', ''
+    puts template.tidy_result
 
-        nagoro = Nagoro.render('<?r a = 42 ?>#{a * 42}')
-        xhtml = nagoro.result(binding)
-        puts xhtml
+### Rendering a template
 
-  Using Nagoro::render with filename, useful because it shows up in backtraces.
+This is handy for one-off scripts that just want to render without caring about
+the compilation step.
 
-        nagoro = Nagoro.render('<?r a = 42 ?>#{a * 42}', :file => 'foo.xhtml')
-        xhtml = nagoro.result(binding)
-        puts xhtml
+    result = Nagoro.render('<?r a = 42 ?>#{a * 42}')
+    puts result
+
+You may also use the equivalent of the `Template#tidy_result` for rendering, that is done just as easily.
+
+    result = Nagoro.tidy_render('<?r a = 42 ?>#{a * 42}')
+    puts result
+
+### Using a path instead of a String
+
+Nagoro will try to find a file matching your argument. It's not very smart
+about this functionality and will only try to determine whether your argument
+exists on the filesystem if the string is smaller than 1024 characters, that's
+mostly done for performance reasons.
+
+    template = Nagoro.compile('yourfile.nag')
+    puts template.result
+
+And of course the same works for `Nagoro::render`.
+
+    puts Nagoro.render('yourfile.nag')
 
 # Examples
 
@@ -165,10 +181,9 @@ get a good coverage despite that.
   For the first implementation of the Localization mechanism which is mostly
   ported from Ramaze.
 
-* Sean Russell
+* Minero Aoki
 
-  For REXML, it's one of the engines that drive nagoro.
-
-* Sean Chittenden and Wai-Sun Chia
-
-  For libxml-ruby, it's one of the engines that drive nagoro.
+  For his excellent StringScanner that works behind the scene, I've used it
+  countless times and was always impressed by the way it makes even the most
+  complex parsing seem trivial. Having it in the Ruby standard library and on
+  all platforms is a significant bonus as well.
