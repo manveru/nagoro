@@ -34,7 +34,7 @@ module Nagoro
 
       case io
       when String
-        io = File.read(io) if File.file?(io)
+        io = File.read(io) if io.size < 1024 and File.file?(io)
         @compiled = pipeline(io)
       when StringIO, IO
         @compiled = pipeline(io.read)
