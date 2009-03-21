@@ -42,11 +42,7 @@ module Nagoro
       # @return [String]
       # @author manveru
       def tidy(string)
-        Open3.popen3('tidy', *FLAGS) do |stdin, stdout, stderr|
-          stdin.puts(string)
-          stdin.close
-          return stdout.read
-        end
+        Nagoro::Tidy.tidy(string, FLAGS)
       end
     end
   end

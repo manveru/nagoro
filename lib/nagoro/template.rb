@@ -71,6 +71,12 @@ module Nagoro
       eval(@compiled, @binding, @file, @line).strip
     end
 
+    def tidy_result(options = {})
+      final = result(options)
+      flags = options.fetch(:flags, Tidy::FLAGS)
+      Tidy.tidy(final, flags).strip
+    end
+
     def render(io, options = {})
       compile(io, options).result
     end

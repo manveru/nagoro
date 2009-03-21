@@ -4,6 +4,8 @@ require 'nagoro/version'
 require 'nagoro/template'
 
 module Nagoro
+  autoload :Tidy, 'nagoro/tidy'
+
   def self.compile(io, options = {})
     Template.new.compile(io, options)
   end
