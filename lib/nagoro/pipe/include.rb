@@ -29,8 +29,7 @@ module Nagoro
       end
 
       def tag_end(tag)
-        return if tag == 'include'
-        super
+        super unless tag == 'include'
       end
     end
   end
