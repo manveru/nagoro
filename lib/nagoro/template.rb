@@ -1,14 +1,7 @@
 require 'nagoro/scanner'
 require 'nagoro/binding'
 require 'nagoro/element'
-
-require 'nagoro/pipe/base'
-require 'nagoro/pipe/compile'
-require 'nagoro/pipe/element'
-require 'nagoro/pipe/include'
-require 'nagoro/pipe/instruction'
-# require 'nagoro/pipe/localization'
-require 'nagoro/pipe/morph'
+require 'nagoro/pipe'
 
 module Nagoro
   DEFAULT_PIPES = [ Pipe::Element, Pipe::Morph, Pipe::Include,
