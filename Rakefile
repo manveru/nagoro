@@ -21,9 +21,8 @@ AUTHOR = "manveru"
 EMAIL = "m.fellinger@gmail.com"
 DESCRIPTION = "An extendable templating engine in pure ruby"
 HOMEPATH = 'http://nagoro.rubyforge.org'
-BIN_FILES = %w( )
+BIN_FILES = %w( nagoro )
 RDOC_FILES = %w[ lib ]
-DEPENDENCIES = {}
 RDOC_OPTS = %w[
   --all
   --quiet
@@ -64,10 +63,10 @@ GemSpec =
       s.email = EMAIL
       s.homepage = HOMEPATH
       s.executables = BIN_FILES
-      # s.bindir = "bin"
+      s.bindir = "bin"
       s.require_path = "lib"
 
-      s.files = (RDOC_FILES + %w[Rakefile] + Dir["{spec,lib}/**/*"]).uniq
+      s.files = `git ls-files`.split("\n").sort
     end
 
 Rake::GemPackageTask.new(GemSpec) do |p|
@@ -105,8 +104,6 @@ Gem::Specification.new do |s|
   s.bindir = %bindir%
   s.require_path = %require_path%
 
-  %dependencies%
-
   s.files = %files%
 end
   OUT
@@ -115,12 +112,8 @@ end
     case key = $1
     when 'version'
       GemSpec.version.to_s.dump
-    when 'dependencies'
-      DEPENDENCIES.map{|l, v|
-        "s.add_dependency(%p, %p)" % [l, v]
-      }.join("\n  ")
     else
-      GemSpec.send($1).pretty_inspect.strip
+      GemSpec.send(key).pretty_inspect.strip
     end
   end
 
