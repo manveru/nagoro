@@ -40,8 +40,7 @@ module Nagoro
       end
 
       def instruction(name, instruction)
-        instruction.strip!
-        append "<?#{name} #{instruction} ?>"
+        append "<?#{name} #{instruction.to_s.strip} ?>"
       end
 
       def tag_with(tag, hash)
