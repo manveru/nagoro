@@ -80,4 +80,11 @@ describe "Nagoro::Template" do
 </body>
 </html>"
   end
+
+  def noop(*args) end
+
+  it "doesn't get stuck when ruby contains double-quotes" do
+    tag = %q(<link href='#{ noop("some.thing") }' />)
+    Nagoro.render(tag, :binding => binding).should == "<link href='' />"
+  end
 end

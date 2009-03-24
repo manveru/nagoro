@@ -55,15 +55,16 @@ module Nagoro
         'foreach' => [ '<?r for %expression ?>', '<?r end ?>' ],
       }
 
-      def tag_start(tag, hash)
-        morphs = hash.keys & MORPHS.keys
+      def tag_start(tag, original_attrs, value_attrs)
+        morphs = value_attrs.keys & MORPHS.keys
         return super if morphs.empty?
 
         if morphs.size > 1
-          raise "Cannot transform multiple morphs: #{hash.inspect} in <#{tag}>"
+          raise "Cannot transform multiple morphs: #{value_attrs.inspect} in <#{tag}>"
         elsif morphs.size == 1
           morph = morphs.first
-          value = hash.delete(morph)
+          value = value_attrs.delete(morph)
+          original_attrs.delete(morph)
           open = MORPHS[morph][0]
 
           append open.gsub(/%morph/, morph).gsub(/%expression/, value)

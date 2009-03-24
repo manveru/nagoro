@@ -14,12 +14,12 @@ module Nagoro
         @body.join
       end
 
-      def tag_start(tag, args)
+      def tag_start(tag, original_attrs, value_attrs)
         case tag
         when *EMPTY_TAG
-          append "#{tag_with(tag, args)} />"
+          append "#{tag_with(tag, original_attrs)} />"
         else
-          append "#{tag_with(tag, args)}>"
+          append "#{tag_with(tag, original_attrs)}>"
         end
       end
 
@@ -45,7 +45,7 @@ module Nagoro
       end
 
       def tag_with(tag, hash)
-        "<#{tag}#{hash.map{|k,v| %( #{k}="#{v}") }.join}"
+        "<#{tag}#{hash.map{|k,v| %( #{k}=#{v}) }.join}"
       end
 
       def doctype(string)

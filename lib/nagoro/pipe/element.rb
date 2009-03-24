@@ -14,9 +14,9 @@ module Nagoro
       class ElementStruct < Struct.new(:tag, :attrs, :element, :content)
       end
 
-      def tag_start(tag, attrs)
+      def tag_start(tag, original_attrs, value_attrs)
         if element = ELEMENTS[tag]
-          @stack << ElementStruct.new(tag, attrs, element, [])
+          @stack << ElementStruct.new(tag, value_attrs, element, [])
         elsif tag =~ /^[A-Z]/
           warn "Element: '<#{tag}>' not found."
           super

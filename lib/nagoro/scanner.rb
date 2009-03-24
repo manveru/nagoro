@@ -9,7 +9,7 @@ module Nagoro
     TAG_END         = /<\/([^>]*)>/
     TAG_OPEN_END    = /\s*>/
     TAG_CLOSING_END = /\s*\/>/
-    TAG_PARAMETER   = /\s*([^\s]*)=(['"])(.*?)\2/um
+    TAG_PARAMETER   = /\s*([^\s]*)=((['"])(.*?)\3)/um
 
     INSTRUCTION_START = /<\?(\S+)/
     INSTRUCTION_END   = /(.*?)(\?>)/um
@@ -64,13 +64,15 @@ module Nagoro
     end
 
     def tag_start(name)
-      args = {}
+      original_attrs = {}
+      value_attrs = {}
 
       while scan(TAG_PARAMETER)
-        args[self[1]] = self[3]
+        original_attrs[self[1]] = self[2] # <a href="foo"> gives 'href'=>'"foo"'
+        value_attrs[   self[1]] = self[4] # <a href="foo"> gives 'href'=>'foo'
       end
 
-      @callback.tag_start(name, args)
+      @callback.tag_start(name, original_attrs, value_attrs)
       return @callback.tag_end(name) if scan(TAG_CLOSING_END)
       scan(TAG_OPEN_END)
     end
