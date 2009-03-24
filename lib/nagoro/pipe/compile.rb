@@ -9,6 +9,8 @@ module Nagoro
           append("`;_out_ << (#{instruction}); _out_ << %Q`")
         when 'h'
           append("`;_out_ << h(#{instruction}); _out_ << %Q`")
+        when 'end'
+          append("`;end; _out_ << %Q`")
         else
           append("<?#{name} #{instruction.strip} ?>")
         end

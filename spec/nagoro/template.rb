@@ -13,6 +13,12 @@ describe "Nagoro" do
     template.compiled.should == '_out_ = []; _out_ << %Q`Hello, World!`; _out_.join'
   end
 
+  should 'compile <?end ?> to <?r end ?>' do
+    string = '<?end ?>'
+    template = Nagoro.compile(string)
+    template.compiled.should == '_out_ = []; _out_ << %Q``;end; _out_ << %Q``; _out_.join'
+  end
+
   should '::render from filename' do
     file = __DIR__/'template/hello.nag'
     rendered = Nagoro.render(file)
