@@ -28,7 +28,7 @@ module Nagoro
       until eos?
         pos = self.pos
         run
-        raise("Scanner didn't move: %p" % self) if pos == self.pos
+        raise(Stuck, "Scanner didn't move: %p" % self) if pos == self.pos
       end
     end
 
@@ -88,5 +88,7 @@ module Nagoro
     def doctype(string)
       @callback.doctype(string)
     end
+
+    class Stuck < Error; end
   end
 end

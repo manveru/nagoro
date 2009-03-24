@@ -39,7 +39,7 @@ module Nagoro
       when StringIO, IO
         @compiled = pipeline(io.read)
       else
-        raise("Cannot compile %p" % io)
+        raise(ArgumentError, "Cannot compile %p" % io)
       end
 
       return self
@@ -54,7 +54,12 @@ module Nagoro
           io = Pipe.const_get(pipe).new(io).result
         end
       end
+
       return io
+    rescue Scanner::Stuck => exception
+      exception.message << " In: #{@file}"
+      puts exception
+      ''
     end
 
     def result(options = {})

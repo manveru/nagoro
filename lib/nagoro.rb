@@ -17,4 +17,6 @@ module Nagoro
   def self.tidy_render(obj, options = {})
     compile(obj, options).tidy_result
   end
+
+  class Error < StandardError; end
 end
