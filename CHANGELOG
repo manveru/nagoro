@@ -1,0 +1,422 @@
+[76b1cf5 | Sat Mar 28 07:54:45 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Refactor rake tasks and manage them with raku
+
+[09002ef | Tue Mar 24 11:51:35 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add <?end ?> instruction for people too lazy to type <?r end ?>
+
+[d54c708 | Tue Mar 24 11:47:09 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Nicer output of non-handled instructions
+
+[bf6cc5d | Tue Mar 24 11:46:33 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Improve error handling
+
+[c8e623b | Tue Mar 24 11:46:12 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fix a bug where nagoro would get stuck on double quotes inside ruby interpolation
+
+[5801e2a | Sat Mar 21 08:35:53 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update gemspec to Version 2009.03.21
+
+[8c30926 | Sat Mar 21 08:35:16 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Run specs more verbose
+
+[85b39db | Sat Mar 21 08:35:02 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Produce cleaner gemspec
+
+[f7ef576 | Sat Mar 21 08:25:50 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update README
+
+[3708543 | Sat Mar 21 08:25:42 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Limit the lookup for valid filenames to strings < 1024 chars
+
+[a4a60ef | Sat Mar 21 08:25:11 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add Nagoro::tidy_render
+
+[bda0670 | Sat Mar 21 08:02:28 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Minor style change
+
+[ebf28ed | Sat Mar 21 08:02:17 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Adding Nagoro::Tidy and Nagoro::Template#tidy_result, having Tidy as a pipe is not suitable if the output contains ruby
+
+[800939a | Sat Mar 21 07:48:41 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Use autoload for pipes
+
+[665969c | Sat Mar 21 07:33:27 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add Nagoro::Pipe::Tidy with spec, *NIX only
+
+[e99dd5c | Mon Mar 09 12:32:21 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Avoid using nil as @file
+
+[d2495f9 | Mon Mar 09 12:32:09 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Avoid warnings in ruby 1.9 when matching unicode
+
+[ff00288 | Mon Mar 09 11:45:15 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add specs for fixed bugs
+
+[e30a601 | Mon Mar 09 11:18:21 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fix bug with nested {} inside #{}
+
+[189e403 | Mon Mar 09 10:14:07 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fix bug where ruby interpolation wouldn't start when indented
+
+[294c5d6 | Mon Mar 09 10:12:47 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add :line option and use :filename instead of :file
+
+[eb660f1 | Fri Feb 06 05:40:25 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * the 'for' morph is now called 'foreach' to avoid collision with the <label for=''> property
+
+[681c9bf | Fri Feb 06 05:39:50 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update readme
+
+[6afeec7 | Thu Jan 29 12:41:38 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Version 2009.01.29
+
+[e35609a | Thu Jan 29 12:40:43 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * style change
+
+[18e1d24 | Thu Jan 29 12:40:28 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Vastly improve Scanner by subclassing StringScanner and using constants for the regular expressions
+
+[3677263 | Thu Jan 29 12:39:51 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Spec for <!DOCTYPE
+
+[c2c3dde | Sat Dec 27 04:37:44 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Enable setting passed instance variables
+
+[b3c08e3 | Sat Dec 27 04:36:58 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Proper error message if scanner is stuck
+
+[b1167c0 | Thu Aug 14 07:04:58 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * New implementation in place
+
+[1ac7f42 | Thu Aug 14 07:04:19 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * New specs in place
+
+[961a118 | Sun May 25 03:59:59 UTC 2008] Fabian Buch <fabian@fabian-buch.com>
+
+  * correct firstname of Kashia
+
+[2e1c268 | Sat May 17 18:21:08 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add <?h ?> PI, wraps instruction in h()
+
+[58917ca | Sat May 17 18:11:15 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Attempt at making html entities work in libxml
+
+[5c19d43 | Sat May 17 18:10:56 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Refactor of engine selection and spec runner
+
+[56a891f | Thu May 15 05:06:42 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Adding gemspec task and gemspec
+
+[f00967f | Thu May 15 01:50:09 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update intro in readme
+
+[9845d05 | Thu May 15 01:39:22 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Put /doc/README at /README.markdown
+
+[1952b97 | Thu May 15 01:38:34 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update doc/README [git, engines]
+
+[f83d904 | Thu May 15 01:05:11 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Bump version
+
+[575127a | Thu May 15 01:02:52 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Give more specific output on engine in spec desc
+
+[d9ca188 | Thu May 15 01:02:22 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Change spec order to StringScanner first
+
+[f7bc3e3 | Thu May 15 01:02:00 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * The map made specs fail due to missing whitespace
+
+[2ddd9c5 | Thu May 15 00:55:29 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Change default engine to StringScanner
+
+[3b069c8 | Thu May 15 00:55:17 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add spec/example
+
+[427c926 | Thu May 15 00:38:46 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Another minor improvment by going inject => each
+
+[f363693 | Thu May 15 00:37:18 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Not using inject improves performance 2x
+
+[1f2ece3 | Thu May 15 00:31:22 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Remove old specs
+
+[211a8cf | Thu May 15 00:29:13 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Update README
+
+[fd08ea5 | Thu May 15 00:28:35 UTC 2008] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Switch from rspec to bacon
+
+[8d89b88 | Tue Dec 25 03:28:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Adding StringScanner wrapper, fastest and most flexible so far, but might need more patches.
+
+    darcs-hash:20071225122823-cbc08-e57296c7e263f0a7788715835a4d9752eae30fd3.gz
+
+[51887e0 | Tue Dec 25 03:27:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Remove the useless wrap/libxml and replace with the libxml reader wrap
+
+    darcs-hash:20071225122738-cbc08-af7cabfc5e020a22c0e31e505243187877aa4386.gz
+
+[5fffb38 | Thu Dec 20 19:52:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Snapshot of rewrite of specs and refactoring
+
+    darcs-hash:20071221045221-cbc08-fdeeb5832f0b9351a2b39a1983009b5261b9a4c7.gz
+
+[112f8b9 | Mon Dec 17 20:46:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Restructure Nagoro::Template
+
+    darcs-hash:20071218054639-cbc08-f3a1c173088c0a4c27f7df86fb1f7256b26d02ae.gz
+
+[0b0a3e8 | Thu Dec 06 05:28:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Finally a version with working XML::Reader, the API might need some cleanup but it's working now according to our specs.
+
+    darcs-hash:20071206142827-cbc08-dc33b35d4b673a8d8224b02b7abc667b0fd875ad.gz
+
+[943e93d | Tue Dec 04 20:17:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Slowly implementing XML::Reader Patch
+
+    darcs-hash:20071205051740-cbc08-f0366a8f85f91c94a90ef63337fd128b093660ff.gz
+
+[d078f19 | Mon Dec 03 21:48:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * First attempts of wrapping XML::Reader
+
+    darcs-hash:20071204064852-cbc08-bfb57da05fa2353d5c35bcaea7ad6b3f44a3220b.gz
+
+[570dd8b | Sun Dec 02 21:11:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Debugging DOCTYPE handling with and without <?xml?>
+
+    darcs-hash:20071203061125-cbc08-2007c069a522989005564fc322864da8d2083a32.gz
+
+[6a92ef4 | Sun Dec 02 15:57:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Implement and improve proper error handling, some issues not yet resolved.
+
+    darcs-hash:20071203005742-cbc08-f78865f3319cda929239e5cb2815c98f955e43bb.gz
+
+[c440dc8 | Fri Nov 30 04:09:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Major refactor for Pipe::Morpher, it's now called Pipe::Morph, sticking with the singular name of other pipes, written docs about syntax and usage, easier configuration and better implementation.
+
+    darcs-hash:20071130130957-cbc08-bb9a2d903cb27cb5f5ce6ae5d5ce889f88d6dc4e.gz
+
+[926ec37 | Fri Nov 30 04:06:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Correct titles of specs for Pipe::Instruction
+
+    darcs-hash:20071130130625-cbc08-0ebe1fccd9e6439aa6c37c762f9e2e346fef50b4.gz
+
+[bf61a4a | Fri Nov 30 04:05:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Lots of improvments and docs for Nagoro::Pipe::Instruction, making instructions configure- and extendable.
+
+    darcs-hash:20071130130528-cbc08-b095166254bb1674adc0f78c547e0e1ea4d259d8.gz
+
+[c52e17a | Fri Nov 30 04:04:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Docs for Nagoro::Pipe::Include
+
+    darcs-hash:20071130130448-cbc08-d9dae40c1adb985e409b47e9b6d953c3c1b28410.gz
+
+[c3a2550 | Fri Nov 30 04:04:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Docs for Nagoro::Pipe::Base
+
+    darcs-hash:20071130130427-cbc08-1c4ebb8e81483628c19087a4fc69499dad3bcf49.gz
+
+[e384f49 | Fri Nov 30 04:03:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Don't rescue in bin/nagoro, makes the interface easier and potentially more useful
+
+    darcs-hash:20071130130325-cbc08-acb12ca2ff78eac21664265239a03a4cd3811c1c.gz
+
+[0c2b5f8 | Fri Nov 30 04:02:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fix bin/nagoro
+
+    darcs-hash:20071130130223-cbc08-3adcc647e726bba0fedd962584e601d888a43ded.gz
+
+[5a99462 | Thu Nov 29 06:27:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fixing last issues, enclose everything in <nagoro></nagoro> to avoid problems without root element.
+
+    darcs-hash:20071129152716-cbc08-680729feed7c04e83703b361aa979463784fa9c9.gz
+
+[26916bd | Thu Nov 29 04:17:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Huge patch, porting Nagoro to libxml-ruby with REXML as fallback.
+
+    darcs-hash:20071129131746-cbc08-6842d1d8c81e2775d948782fb350b1c2f28abd9f.gz
+
+[6016ccd | Wed Nov 28 05:26:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Minor update to README, change pipe/include to use Kernel#open so it can be modified by open-uri and one can include other resources more easily
+
+    darcs-hash:20071128142620-cbc08-5b7ce6dd65ab11f90f4719947190a53a754e3be0.gz
+
+[affb950 | Wed Nov 28 03:02:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Another update for the README
+
+    darcs-hash:20071128120208-cbc08-5f0ad11a39107d0a44ee3fb16862c755d93d8f9f.gz
+
+[553cc85 | Wed Nov 28 03:00:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add bin/nagoro, add Nagoro::render and Nagoro::render_file, fix some bugs and improve errors. Also updated README
+
+    darcs-hash:20071128120025-cbc08-f56229e007e74fbf9c5220f0559dd60e9a65ff4b.gz
+
+[1fc1a45 | Tue Nov 27 20:07:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Version 0.2
+
+    darcs-hash:20071128050754-cbc08-bc9dfd2ec33bfbf47af1f96fd7b36965878ba5bb.gz
+
+[7cf3f3f | Tue Nov 27 20:07:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Adding stuff in /doc
+
+    darcs-hash:20071128050735-cbc08-eddd3c0cde9d7300bc505c494b398aeac357c1a7.gz
+
+[cd58a7d | Tue Nov 27 14:56:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Listener and Transformer now live happily together in Pipe
+
+    darcs-hash:20071127235627-cbc08-87282d3ea612eb8fa637eee66dc7914205218ce7.gz
+
+[d56fe79 | Mon Nov 26 19:08:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fixing issues with Element, append wasn't used for instructions, adding options for render, improved some specs, added some snippets. This version of nagoro is rock-solid? :)
+
+    darcs-hash:20071127040829-cbc08-e8aab83284bcb04e7520c8c2647311025760b251.gz
+
+[bee71dd | Mon Nov 12 18:59:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Improve specsuite a bit to make it more DRY.
+
+    darcs-hash:20071113035937-cbc08-1bcd0d1211d662c543150ebc153cccf7415635b3.gz
+
+[0083001 | Sun Oct 21 13:09:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add Transformer::Localization, wrong module still.
+
+    darcs-hash:20071021220929-cbc08-a42e4501ec16dc69e26787347ebb3a76e62313ca.gz
+
+[1928c25 | Thu Oct 18 20:29:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Spec and fix for Listener::Include
+
+    darcs-hash:20071019052947-cbc08-9557ce134da73708ed98cd421aeb30505cb0e987.gz
+
+[6a098c9 | Wed Oct 17 19:45:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Disable unescaping entities like &lt;/&gt; to <>
+
+    darcs-hash:20071018044508-cbc08-0ac50eb5e68d35affa95bb25f104e93af5c4dd2e.gz
+
+[af11344 | Wed Oct 17 03:48:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Make <br> and <hr> only </ br> and </ hr>, they don't have to open.
+
+    darcs-hash:20071017124853-cbc08-46dc32c17b2d982707f03bdfc1058940450a8a2f.gz
+
+[488330f | Tue Oct 16 19:39:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Minimal wrapper for specs to make darcs happy
+
+    darcs-hash:20071017043935-cbc08-56b94f355c986bb1b0cc96e095fe40c2786c76bf.gz
+
+[691bf32 | Tue Oct 16 19:13:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add Rakefile and nagoro/version
+
+    darcs-hash:20071017041301-cbc08-641152265df1b8fc73d2fd2638344ce1fd00fc0d.gz
+
+[30bd3dd | Tue Oct 16 02:59:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Move nagoro/render to nagoro/template and remove require for the compile listener
+
+    darcs-hash:20071016115901-cbc08-136b5ecef3ea81c9b7744c2ae7cfeec21dd9110b.gz
+
+[3dc5ce9 | Tue Oct 16 02:58:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Accept multiple listeners passed as array to Template::[]
+
+    darcs-hash:20071016115803-cbc08-31314ab667f1b349106d80088f8476c3108a9e06.gz
+
+[bc1224d | Mon Oct 15 22:21:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Yet another rewrite of the API, see specs for the new coolness
+
+    darcs-hash:20071016072117-cbc08-3d8c1c73e7824cfbb5d040e9620df1fdb3dab0b7.gz
+
+[925a1c5 | Mon Oct 15 03:47:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Changes in Render API, implemented compile as simple gsub, 5x speedup
+
+    darcs-hash:20071015124739-cbc08-3d8fd6f0a3967e7e3a4334b245a90ae64044449f.gz
+
+[714a653 | Sun Oct 14 05:33:00 UTC 2007] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Init
+
+    darcs-hash:20071014143301-cbc08-4b9f80b84dfabc30df3b5fc010cb6a32fa2617cc.gz
+
