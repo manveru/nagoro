@@ -66,11 +66,11 @@ module Nagoro
       parse_option(options) unless options.empty?
 
       if vars = @variables
-        obj = @binding.eval('self')
+        obj = eval('self', @binding)
         obj.instance_variable_set('@_nagoro_ivs', vars)
-        @binding.eval(%q(
+        eval(%q(
           @_nagoro_ivs.each{|key, value| instance_variable_set("@#{key}", value) }
-        ))
+        ), @binding)
       end
 
       eval(@compiled, @binding, @file, @line).strip
