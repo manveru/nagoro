@@ -93,4 +93,13 @@ describe "Nagoro::Template" do
     tag = %q(<link href='#{ noop("some.thing") }' />)
     Nagoro.render(tag, :binding => binding).should == "<link href='' />"
   end
+
+  it "ignores comments" do
+    comment = '
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" media="screen, projection" href="css/blueprint/ie.css">
+<![endif]-->'.strip
+
+    Nagoro.render(comment).should == comment
+  end
 end

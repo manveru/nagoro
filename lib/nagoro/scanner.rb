@@ -19,6 +19,8 @@ module Nagoro
     RUBY_INTERP_NEST  = /\{[^\}]*\}/m
     RUBY_INTERP_END   = /(?=\})/
 
+    COMMENT = /<!--.*?-->/m
+
     def initialize(string, callback)
       @callback = callback
       super(string)
@@ -35,6 +37,7 @@ module Nagoro
     def run
       if    scan(DOCTYPE          ); doctype(self[1])
       elsif scan(INSTRUCTION_START); instruction(self[1])
+      elsif scan(COMMENT          ); text(matched)
       elsif scan(TAG_END          ); tag_end(self[1])
       elsif scan(RUBY_INTERP_START); ruby_interp(matched)
       elsif scan(TAG_START        ); tag_start(self[1])
