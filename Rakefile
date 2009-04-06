@@ -4,7 +4,7 @@ require 'rake/gempackagetask'
 require 'time'
 require 'date'
 
-PROJECT_SPECS = Dir['spec/**/*.rb']
+PROJECT_SPECS = Dir['spec/{nagoro,example}/**/*.rb']
 PROJECT_MODULE = 'Nagoro'
 
 GEMSPEC = Gem::Specification.new{|s|
