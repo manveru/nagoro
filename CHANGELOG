@@ -1,3 +1,23 @@
+[e4e1987 | Mon Apr 06 01:21:44 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Don't try to touch comments
+
+[d799fc6 | Mon Apr 06 01:21:26 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Only run specs when running specs...
+
+[495e064 | Wed Apr 01 02:03:45 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Remove Binding#eval usage to be compatible with 1.8.6
+
+[677557f | Sat Mar 28 07:55:41 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Remove the bench script, we only have one engine now
+
+[a4101a3 | Sat Mar 28 07:55:01 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Version 2009.03.28
+
 [76b1cf5 | Sat Mar 28 07:54:45 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
 
   * Refactor rake tasks and manage them with raku

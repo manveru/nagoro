@@ -1,6 +1,7 @@
+CHANGELOG
+MANIFEST
 README.markdown
 Rakefile
-bench.rb
 bin/nagoro
 doc/COPYING
 doc/GPL

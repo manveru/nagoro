@@ -6,6 +6,7 @@ require 'date'
 
 PROJECT_SPECS = Dir['spec/{nagoro,example}/**/*.rb']
 PROJECT_MODULE = 'Nagoro'
+PROJECT_VERSION = ENV['VERSION'] || Date.today.strftime("%Y.%m.%d")
 
 GEMSPEC = Gem::Specification.new{|s|
   s.name         = 'nagoro'
@@ -15,7 +16,7 @@ GEMSPEC = Gem::Specification.new{|s|
   s.email        = 'm.fellinger@gmail.com'
   s.homepage     = 'http://github.com/manveru/nagoro'
   s.platform     = Gem::Platform::RUBY
-  s.version      = (ENV['PROJECT_VERSION'] || Date.today.strftime("%Y.%m.%d"))
+  s.version      = PROJECT_VERSION
   s.files        = `git ls-files`.split("\n").sort
   s.has_rdoc     = true
   s.require_path = 'lib'

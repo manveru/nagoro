@@ -1,3 +1,3 @@
 module Nagoro
-  VERSION = "2009.03.28"
+  VERSION = "2009.05"
 end
