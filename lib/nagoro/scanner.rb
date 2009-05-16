@@ -9,7 +9,7 @@ module Nagoro
     TAG_END         = /<\/([^>]*)>/
     TAG_OPEN_END    = /\s*>/
     TAG_CLOSING_END = /\s*\/>/
-    TAG_PARAMETER   = /\s*([^\s]*)=((['"])(.*?)\3)/um
+    TAG_PARAMETER   = /\s*([^\s=]*)=((['"])(.*?)\3)/um
 
     INSTRUCTION_START = /<\?(\S+)/
     INSTRUCTION_END   = /(.*?)(\?>)/um

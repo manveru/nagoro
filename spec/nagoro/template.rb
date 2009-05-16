@@ -102,4 +102,11 @@ describe "Nagoro::Template" do
 
     Nagoro.render(comment).should == comment
   end
+
+  it "ignores javascript in parameter" do
+    @stuff = 'nothing'
+    tag = %q|<a href="stuff" onmouseover='this.src="#{@stuff}"'>stuff</a>|
+
+    Nagoro.render(tag, :binding => binding).should == %|<a href="stuff" onmouseover='this.src="#{@stuff}"'>stuff</a>|
+  end
 end
