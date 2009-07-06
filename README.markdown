@@ -3,14 +3,17 @@
 
 # About Nagoro
 
-Nagoro is a templating engine for XHTML based on different parsing engines.
-It featues a modular code layout and is used in the Ramaze web framework.
+Nagoro is a templating engine for HTML and XML, consequently also for XHTML.
 
 Nagoro consists of a series of so-called pipes to produce valid ruby from the
 templates that are eventually evaluated with custom binding.
 
 All functionality of Nagoro is carefully tested by a series of specs to avoid
-breakage and give a good overview of nagoros capabilities.
+breakage and give a good overview of Nagoro's capabilities.
+
+Parsing is done by a fine-tuned StringScanner that avoids actually checking
+validity of the documents, this way you can use Ruby interpolation without
+having to enclose it into CDATA sections.
 
 # Features Overview
 
@@ -157,6 +160,55 @@ And of course the same works for `Nagoro::render`.
 Examples can be found in the /example directory.
 
 
+# Future plans
+
+## Various backends
+
+Using Nokogiri, Hpricot, REXML, or libxml-ruby as backends for Nagoro.
+
+I actually implemented backends in REXML and libxml-ruby in previous versions
+of Nagoro, but their insistence on well-formed markup made them unsuitable for
+the style of interpolation required.
+
+As a quick example, given a document that contains `<h1>#{1 < 10}</h1>`.
+
+Nokogiri would produce `<h1>#{1</h1>` in HTML mode. In XML mode it will produce
+`<h1>#{1  10}</h1>`. Both are useless interpretations of the document.
+
+The libxml-ruby binding doesn't allow for relaxed parsing, and will fail to
+parse. Since it's just a thin binding, there is no way to monkeypatch the
+underlying parser, while it might still be possible to achieve something
+similar using FFI or DL, the way that Nokogiri parses leaves me little hope
+that I could actually bend it to my will.
+
+REXML usually fails as well, and the monkeypatching required to make it parse
+the input document would far exceed the amount of code required for our custom
+parser, not to mention that the speed of REXML would still be very hard to
+tolerate, the only argument for it seems to be that it's in stdlib.
+
+Hpricot on the other hand doesn't provide a SaX API, and so isn't suited very
+well to the pipe style of Nagoro, but is still the best candidate as it will
+parse Nagoro documents correctly (in most cases).
+
+That's just a quick run-down, I spent almost 2 weeks banging my head against
+REXML and libxml-ruby.
+The reason I avoided Hpricot is that I don't want to have a full Node
+representation in memory, it's already questionable if having the whole
+document as a String in memory is a good design choice.
+
+## Stream parsing
+
+This is impossible with StringScanner, it is hard-wired to check that you
+actually give it a String (in C via the StringValue macro).
+It would be possible with real SaX parser, but due to their limitations pointed
+out above, we cannot use them.
+
+An option would be to implement a parser in pure Ruby.
+I will leave that to other people, the documents I process fit comfortably into
+memory, and if you are processing larger documents, you will most likely have
+to utilize something like XSLT.
+
+
 # And thanks to...
 
 This list is by no means a full listing of all these people, but I try to
@@ -174,7 +226,7 @@ get a good coverage despite that.
 * George Moschovitis a.k.a. gmosx
 
   For the Nitro web framework. Its templating engine has been the inspiration
-  for nagoro.
+  for Nagoro.
 
 * Jonathan Buch a.k.a. Kashia
 
