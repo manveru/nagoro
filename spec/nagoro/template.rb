@@ -109,4 +109,8 @@ describe "Nagoro::Template" do
 
     Nagoro.render(tag, :binding => binding).should == %|<a href="stuff" onmouseover='this.src="#{@stuff}"'>stuff</a>|
   end
+
+  it 'The param tag should be left open if it is not closed' do
+    Nagoro.render('<param><tag>foo</tag></param>').should == '<param><tag>foo</tag></param>'
+  end
 end

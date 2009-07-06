@@ -1,9 +1,6 @@
 module Nagoro
   module Pipe
     class Base
-      EMPTY_TAG = %w[ area base basefont br col frame hr
-                      img input isindex link meta param ]
-
       def initialize(io)
         @body, @stack = [], []
         @scanner = Scanner.new(io, self)
@@ -14,21 +11,16 @@ module Nagoro
         @body.join
       end
 
+      def tag(tag, original_attrs, value_attrs)
+        append "#{tag_with(tag, original_attrs)} />"
+      end
+
       def tag_start(tag, original_attrs, value_attrs)
-        case tag
-        when *EMPTY_TAG
-          append "#{tag_with(tag, original_attrs)} />"
-        else
-          append "#{tag_with(tag, original_attrs)}>"
-        end
+        append "#{tag_with(tag, original_attrs)}>"
       end
 
       def tag_end(tag)
-        case tag
-        when *EMPTY_TAG
-        else
-          append "</#{tag}>"
-        end
+        append "</#{tag}>"
       end
 
       def text(string)

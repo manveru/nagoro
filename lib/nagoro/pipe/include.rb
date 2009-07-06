@@ -12,6 +12,15 @@ module Nagoro
     #   <include src="some_file.xhtml" />
 
     class Include < Base
+      def tag(tag, original_attrs, value_attrs)
+        if tag == 'include'
+          filename = value_attrs['href'] || value_attrs.fetch('src')
+          append contents(filename)
+        else
+          super
+        end
+      end
+
       def tag_start(tag, original_attrs, value_attrs)
         if tag == 'include'
           filename = value_attrs['href'] || value_attrs.fetch('src')

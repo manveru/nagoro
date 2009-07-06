@@ -75,9 +75,12 @@ module Nagoro
         value_attrs[   self[1]] = self[4] # <a href="foo"> gives 'href'=>'foo'
       end
 
-      @callback.tag_start(name, original_attrs, value_attrs)
-      return @callback.tag_end(name) if scan(TAG_CLOSING_END)
-      scan(TAG_OPEN_END)
+      if scan(TAG_CLOSING_END)
+        @callback.tag(name, original_attrs, value_attrs)
+      else
+        @callback.tag_start(name, original_attrs, value_attrs)
+        scan(TAG_OPEN_END)
+      end
     end
 
     def tag_end(name)

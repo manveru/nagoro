@@ -14,6 +14,29 @@ module Nagoro
       class ElementStruct < Struct.new(:tag, :attrs, :element, :content)
       end
 
+      def tag(tag, original_attrs, value_attrs)
+        if element = ELEMENTS[tag]
+          estruct = ElementStruct.new(tag, value_attrs, element, [])
+        elsif tag =~ /^[A-Z]/
+          warn "Element: '<#{tag}>' not found."
+          super
+        else
+          super
+        end
+
+        if estruct
+          attrs, element, content = estruct.values_at(1..3)
+
+          if element.respond_to?(:call)
+            append element.call(content.join, attrs)
+          else
+            instance = element.new(content.join)
+            instance.params = translate_attrs(instance, estruct.attrs)
+            append instance.render
+          end
+        end
+      end
+
       def tag_start(tag, original_attrs, value_attrs)
         if element = ELEMENTS[tag]
           @stack << ElementStruct.new(tag, value_attrs, element, [])
