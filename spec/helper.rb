@@ -1,5 +1,5 @@
-require 'lib/nagoro'
-require 'spec/core_extensions'
+require File.expand_path('../../lib/nagoro', __FILE__)
+require File.expand_path('../core_extensions', __FILE__)
 
 require 'stringio'
 require 'rexml/document'

@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../helper', __FILE__)
 
 describe "Nagoro" do
   should '::compile from filename' do
@@ -108,5 +108,9 @@ describe "Nagoro::Template" do
     tag = %q|<a href="stuff" onmouseover='this.src="#{@stuff}"'>stuff</a>|
 
     Nagoro.render(tag, :binding => binding).should == %|<a href="stuff" onmouseover='this.src="#{@stuff}"'>stuff</a>|
+  end
+
+  it 'does the right thing' do
+    Nagoro.render("<param><foo>42</foo></param>").should == '<param><foo>42</foo></param>'
   end
 end
