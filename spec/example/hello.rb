@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../helper', __FILE__)
 
 describe "example/hello.nag" do
   behaves_like 'xpath'

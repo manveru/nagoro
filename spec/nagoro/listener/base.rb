@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../../helper', __FILE__)
 
 describe "Nagoro::Listener::Base" do
   def base(string)

@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../../helper', __FILE__)
 require 'nagoro/pipe/tidy'
 
 describe "Nagoro::Pipe::Tidy" do

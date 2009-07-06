@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../../helper', __FILE__)
 
 describe "Nagoro::Pipe::Element" do
   behaves_like 'xpath'

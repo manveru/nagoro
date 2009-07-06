@@ -1,4 +1,4 @@
-require 'spec/helper'
+require File.expand_path('../../../helper', __FILE__)
 
 describe "Nagoro::Pipe::Compile" do
   def render(obj)
