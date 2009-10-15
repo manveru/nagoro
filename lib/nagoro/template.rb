@@ -50,6 +50,8 @@ module Nagoro
       @pipes.each do |pipe|
         if pipe.respond_to?(:new)
           io = pipe.new(io).result
+        elsif pipe.respond_to?(:call)
+          io = pipe.call(io)
         else
           io = Pipe.const_get(pipe).new(io).result
         end
