@@ -69,10 +69,9 @@ module Nagoro
 
       if vars = @variables
         obj = eval('self', @binding)
-        obj.instance_variable_set('@_nagoro_ivs', vars)
-        eval(%q(
-          @_nagoro_ivs.each{|key, value| instance_variable_set("@#{key}", value) }
-        ), @binding)
+        vars.each do |key, value|
+          obj.instance_variable_set("@#{key}", value)
+        end
       end
 
       eval(@compiled, @binding, @file, @line).strip
