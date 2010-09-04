@@ -36,7 +36,7 @@ module Nagoro
       end
 
       def tag_with(tag, hash)
-        "<#{tag}#{hash.map{|k,v| %( #{k}=#{v}) }.join}"
+        "<#{tag}#{hash.map{|k,v| (v == nil) ? %( #{k}) : %( #{k}=#{v}) }.join}"
       end
 
       def doctype(string)
