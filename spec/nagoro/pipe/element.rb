@@ -7,10 +7,6 @@ describe "Nagoro::Pipe::Element" do
     Nagoro::Template[Nagoro::Pipe::Element].compile(obj).compiled
   end
 
-  def help_func(attrs={:key => "value"})
-    "--#{attrs[:key]}--"
-  end
-
   Nagoro.element('Page') do |content, attrs|
     "(Page: #{content.dump})"
   end
@@ -41,29 +37,9 @@ describe "Nagoro::Pipe::Element" do
       should == '(Page: "(SideBar: \\"\\")")'
   end
 
-  it 'should compile function' do
-    ::Nagoro.render('#{help_func}', :binding => binding).
-      should == '--value--'
-  end
-
-  it 'should compile hash argument' do
-    ::Nagoro.render('#{help_func :key => "fail"}', :binding => binding).
-      should == '--fail--'
-  end
-
-  it 'should compile nested function' do
-    ::Nagoro.render('<Page>#{help_func}</Page>', :binding => binding).
-      should == '(Page: "--value--")'
-  end
-
-  it 'should compile nested hash argument' do
-    ::Nagoro.render('<Page>#{help_func :key => "fail"}</Page>', :binding => binding).
-      should == '(Page: "--fail--")'
-  end
-
-  it 'should compile nested nested hash argument' do
-    ::Nagoro.render('<Page><SideBar>#{help_func :key => "fail"}</SideBar></Page>').
-      should == '(Page: "(SideBar: \\"--fail--\\")")'
+  it 'should compile nested instructions in the middle of a text' do
+    compile('<Page> x #{test :x => 1}</Page>').
+      should == '(Page: " x \\#{test :x => 1}")'
   end
 
   it 'should render file-elements' do
