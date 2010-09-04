@@ -2,7 +2,9 @@ require 'strscan'
 
 module Nagoro
   class Scanner < StringScanner
-    TEXT = /[^<>]+/m
+    TEXT = /[^<>#]+/m
+    HASH_TEXT = /#[^\{<]#{TEXT}/m
+    HASH_CHAR = /#/
     DOCTYPE = /<!DOCTYPE([^>]+)>/m
 
     TAG_START       = /<([^\s>]+)/
@@ -18,6 +20,7 @@ module Nagoro
     RUBY_INTERP_TEXT  = /[^\{\}]+/m
     RUBY_INTERP_NEST  = /\{[^\}]*\}/m
     RUBY_INTERP_END   = /(?=\})/
+    RUBY_TAG_INTERP   = /\s*(#\{.*?\})/m
 
     COMMENT = /<!--.*?-->/m
 
@@ -42,6 +45,7 @@ module Nagoro
       elsif scan(RUBY_INTERP_START); ruby_interp(matched)
       elsif scan(TAG_START        ); tag_start(self[1])
       elsif scan(TEXT             ); text(matched)
+      elsif scan(HASH_CHAR        ); hash_char(matched)
       end
     end
 
@@ -70,16 +74,21 @@ module Nagoro
       original_attrs = {}
       value_attrs = {}
 
-      while scan(TAG_PARAMETER)
-        original_attrs[self[1]] = self[2] # <a href="foo"> gives 'href'=>'"foo"'
-        value_attrs[   self[1]] = self[4] # <a href="foo"> gives 'href'=>'foo'
-      end
-
-      if scan(TAG_CLOSING_END)
-        @callback.tag(name, original_attrs, value_attrs)
-      else
-        @callback.tag_start(name, original_attrs, value_attrs)
-        scan(TAG_OPEN_END)
+      done = false
+      while not done
+        if scan(RUBY_TAG_INTERP)
+          original_attrs[self[1]] = nil
+          value_attrs[self[1]] = nil
+        elsif scan(TAG_PARAMETER)
+          original_attrs[self[1]] = self[2] # <a href="foo"> gives 'href'=>'"foo"'
+          value_attrs[   self[1]] = self[4] # <a href="foo"> gives 'href'=>'foo'
+        elsif scan(TAG_CLOSING_END)
+          @callback.tag(name, original_attrs, value_attrs)
+          done = true
+        elsif scan(TAG_OPEN_END)
+          @callback.tag_start(name, original_attrs, value_attrs)
+          done = true
+        end
       end
     end
 
@@ -88,6 +97,13 @@ module Nagoro
     end
 
     def text(string)
+      if scan(HASH_TEXT)
+        string << matched
+      end
+      @callback.text(string)
+    end
+
+    def hash_char(string)
       @callback.text(string)
     end
 

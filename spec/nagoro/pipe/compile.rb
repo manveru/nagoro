@@ -28,4 +28,22 @@ describe "Nagoro::Pipe::Compile" do
   should 'not fail on > inside ruby instruction' do
     render('#{{:hi => :there}[:hi]}').should == 'there'
   end
+
+  should 'compile #<tag>' do
+    render('#<br />').should == '#<br />'
+  end
+
+  should 'compile interpreter inside tag' do
+    tag = %q~<option value="a" #{'selected="selected"'}>A</option>~
+    res = render(tag)
+    res.should =~ /^<option /
+    res.should =~ />A<\/option>/
+    res.should =~ /value="a"/
+    res.should =~ /selected="selected"/
+  end
+
+  should 'compile #< in the middle of a text' do
+    render('Article number: #<br />').should == 'Article number: #<br />'
+  end
+
 end
