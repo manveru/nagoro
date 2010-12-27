@@ -6,12 +6,12 @@
     <?r list = [true, false, true] ?>
 
     True items in list:
-    <div for="cond in list">
+    <div foreach="cond in list">
       <h1 if="cond">#{cond}</h1>
     </div>
 
     False items in list:
-    <div for="cond in list">
+    <div foreach="cond in list">
       <h1 unless="cond">#{cond}</h1>
     </div>
 
