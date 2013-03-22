@@ -49,7 +49,7 @@ module Nagoro
       MORPHS = {
         'each'    => [ '<?r %expression.%morph do |_e| ?>', '<?r end ?>' ],
         'times'   => [ '<?r %expression.%morph do |_t| ?>', '<?r end ?>' ],
-        'filter'  => [ '<?o %expression(%<', '>) ?>' ],
+        'filter'  => [ '<?r %expression(%<', '>) ?>' ],
         'if'      => [ '<?r %morph %expression ?>', '<?r end ?>' ],
         'unless'  => [ '<?r %morph %expression ?>', '<?r end ?>' ],
         'foreach' => [ '<?r for %expression ?>', '<?r end ?>' ],
