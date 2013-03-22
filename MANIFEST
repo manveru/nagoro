@@ -39,12 +39,10 @@ spec/nagoro/pipe/tidy.rb
 spec/nagoro/template.rb
 spec/nagoro/template/full.nag
 spec/nagoro/template/hello.nag
+tasks/authors.rake
 tasks/bacon.rake
 tasks/changelog.rake
 tasks/gem.rake
-tasks/gem_installer.rake
-tasks/grancher.rake
-tasks/install_dependencies.rake
 tasks/manifest.rake
 tasks/rcov.rake
 tasks/release.rake
