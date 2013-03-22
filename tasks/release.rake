@@ -1,52 +1,41 @@
 namespace :release do
-  task :all => [:release_github, :release_rubyforge]
+  task :prepare => [:reversion, :authors, :gemspec]
+  task :all => ['release:github', 'release:gemcutter']
 
-  desc 'Display instructions to release on github'
-  task :github => [:reversion, :gemspec] do
+  desc 'Release on github'
+  task :github => :prepare do
     name, version = GEMSPEC.name, GEMSPEC.version
 
-    puts <<INSTRUCTIONS
-First add the relevant files:
+    sh('git', 'add',
+       'MANIFEST', 'CHANGELOG', 'AUTHORS',
+       "#{name}.gemspec",
+       "lib/#{name}/version.rb")
 
-git add MANIFEST CHANGELOG #{name}.gemspec lib/#{name}/version.rb
+    puts <<-INSTRUCTIONS
+================================================================================
 
-Then commit them, tag the commit, and push:
+I added the relevant files, you can commit them, tag the commit, and push:
 
 git commit -m 'Version #{version}'
 git tag -a -m '#{version}' '#{version}'
 git push
 
-INSTRUCTIONS
-
+================================================================================
+    INSTRUCTIONS
   end
 
-  # TODO: Not tested
-  desc 'Display instructions to release on rubyforge'
-  task :rubyforge => [:reversion, :gemspec, :package] do
+  desc 'Release on gemcutter'
+  task :gemcutter => ['release:prepare', :package] do
     name, version = GEMSPEC.name, GEMSPEC.version
 
-    puts <<INSTRUCTIONS
-To publish to rubyforge do following:
+    puts <<-INSTRUCTIONS
+================================================================================
 
-rubyforge login
-rubyforge add_release #{name} #{name} '#{version}' pkg/#{name}-#{version}.gem
+To publish to gemcutter do following:
 
-After you have done these steps, see:
+gem push pkg/#{name}-#{version}.gem
 
-rake release:rubyforge_archives
-
-INSTRUCTIONS
-  end
-
-  desc 'Display instructions to add archives after release:rubyforge'
-  task :rubyforge_archives do
-    name, version = GEMSPEC.name, GEMSPEC.version
-    puts "Adding archives for distro packagers is:", ""
-
-    Dir["pkg/#{name}-#{version}.{tgz,zip}"].each do |file|
-      puts "rubyforge add_file #{name} #{name} '#{version}' '#{file}'"
-    end
-
-    puts
+================================================================================
+    INSTRUCTIONS
   end
 end

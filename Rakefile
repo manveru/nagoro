@@ -1,12 +1,11 @@
-require 'rake'
 require 'rake/clean'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 require 'time'
 require 'date'
 
 PROJECT_SPECS = Dir['spec/{nagoro,example}/**/*.rb']
 PROJECT_MODULE = 'Nagoro'
-PROJECT_VERSION = ENV['VERSION'] || Date.today.strftime("%Y.%m.%d")
+PROJECT_VERSION = (ENV['VERSION'] || Date.today.strftime('%Y.%m.%d')).dup
 
 GEMSPEC = Gem::Specification.new{|s|
   s.name         = 'nagoro'
